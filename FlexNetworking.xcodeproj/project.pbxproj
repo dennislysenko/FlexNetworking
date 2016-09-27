@@ -7,13 +7,23 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1D1CBE0EF99A413B7395F1F6 /* Pods_FlexNetworking.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A0A7AD305F2943AD02B7DA30 /* Pods_FlexNetworking.framework */; };
 		95F9AB2B1D9AFA8600AACD19 /* FlexNetworking.h in Headers */ = {isa = PBXBuildFile; fileRef = 95F9AB291D9AFA8600AACD19 /* FlexNetworking.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		95F9AB321D9AFA9200AACD19 /* FlexNetworking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95F9AB311D9AFA9200AACD19 /* FlexNetworking.swift */; };
+		95F9AB351D9AFDDC00AACD19 /* FlexNetworking.podspec in Resources */ = {isa = PBXBuildFile; fileRef = 95F9AB331D9AFDDC00AACD19 /* FlexNetworking.podspec */; };
+		95F9AB361D9AFDDC00AACD19 /* Podfile in Resources */ = {isa = PBXBuildFile; fileRef = 95F9AB341D9AFDDC00AACD19 /* Podfile */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		2AB802AA0E8F0C45DE0C3E62 /* Pods-FlexNetworking.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FlexNetworking.release.xcconfig"; path = "Pods/Target Support Files/Pods-FlexNetworking/Pods-FlexNetworking.release.xcconfig"; sourceTree = "<group>"; };
 		95F9AB261D9AFA8600AACD19 /* FlexNetworking.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = FlexNetworking.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		95F9AB291D9AFA8600AACD19 /* FlexNetworking.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FlexNetworking.h; sourceTree = "<group>"; };
 		95F9AB2A1D9AFA8600AACD19 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		95F9AB311D9AFA9200AACD19 /* FlexNetworking.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlexNetworking.swift; sourceTree = "<group>"; };
+		95F9AB331D9AFDDC00AACD19 /* FlexNetworking.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = FlexNetworking.podspec; sourceTree = "<group>"; };
+		95F9AB341D9AFDDC00AACD19 /* Podfile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Podfile; sourceTree = "<group>"; };
+		A0A7AD305F2943AD02B7DA30 /* Pods_FlexNetworking.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FlexNetworking.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		DCD65FA178D85E8289E6F76D /* Pods-FlexNetworking.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FlexNetworking.debug.xcconfig"; path = "Pods/Target Support Files/Pods-FlexNetworking/Pods-FlexNetworking.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -21,17 +31,39 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1D1CBE0EF99A413B7395F1F6 /* Pods_FlexNetworking.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		3952257AE9F4B8378EE09B1D /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				DCD65FA178D85E8289E6F76D /* Pods-FlexNetworking.debug.xcconfig */,
+				2AB802AA0E8F0C45DE0C3E62 /* Pods-FlexNetworking.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		949EFAC3B369F43FAC8A63DD /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				A0A7AD305F2943AD02B7DA30 /* Pods_FlexNetworking.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		95F9AB1C1D9AFA8600AACD19 = {
 			isa = PBXGroup;
 			children = (
+				95F9AB331D9AFDDC00AACD19 /* FlexNetworking.podspec */,
+				95F9AB341D9AFDDC00AACD19 /* Podfile */,
 				95F9AB281D9AFA8600AACD19 /* FlexNetworking */,
 				95F9AB271D9AFA8600AACD19 /* Products */,
+				3952257AE9F4B8378EE09B1D /* Pods */,
+				949EFAC3B369F43FAC8A63DD /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -48,6 +80,7 @@
 			children = (
 				95F9AB291D9AFA8600AACD19 /* FlexNetworking.h */,
 				95F9AB2A1D9AFA8600AACD19 /* Info.plist */,
+				95F9AB311D9AFA9200AACD19 /* FlexNetworking.swift */,
 			);
 			path = FlexNetworking;
 			sourceTree = "<group>";
@@ -70,10 +103,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 95F9AB2E1D9AFA8600AACD19 /* Build configuration list for PBXNativeTarget "FlexNetworking" */;
 			buildPhases = (
+				19D9897A2B522698418ECD52 /* [CP] Check Pods Manifest.lock */,
 				95F9AB211D9AFA8600AACD19 /* Sources */,
 				95F9AB221D9AFA8600AACD19 /* Frameworks */,
 				95F9AB231D9AFA8600AACD19 /* Headers */,
 				95F9AB241D9AFA8600AACD19 /* Resources */,
+				5A3399AE3EA251072F31BD5E /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -96,6 +131,7 @@
 					95F9AB251D9AFA8600AACD19 = {
 						CreatedOnToolsVersion = 8.0;
 						DevelopmentTeam = 9UJX3YQZ2B;
+						LastSwiftMigration = 0800;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -122,16 +158,52 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				95F9AB361D9AFDDC00AACD19 /* Podfile in Resources */,
+				95F9AB351D9AFDDC00AACD19 /* FlexNetworking.podspec in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		19D9897A2B522698418ECD52 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		5A3399AE3EA251072F31BD5E /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-FlexNetworking/Pods-FlexNetworking-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		95F9AB211D9AFA8600AACD19 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				95F9AB321D9AFA9200AACD19 /* FlexNetworking.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -239,7 +311,9 @@
 		};
 		95F9AB2F1D9AFA8600AACD19 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = DCD65FA178D85E8289E6F76D /* Pods-FlexNetworking.debug.xcconfig */;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 9UJX3YQZ2B;
@@ -252,13 +326,16 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.riffdigital.FlexNetworking;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
 		95F9AB301D9AFA8600AACD19 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2AB802AA0E8F0C45DE0C3E62 /* Pods-FlexNetworking.release.xcconfig */;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 9UJX3YQZ2B;
@@ -294,6 +371,7 @@
 				95F9AB301D9AFA8600AACD19 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
