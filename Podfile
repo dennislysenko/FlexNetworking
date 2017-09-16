@@ -6,5 +6,5 @@ target 'FlexNetworking' do
   use_frameworks!
 
   # Pods for FlexNetworking
-  pod 'SwiftyJSON', '3.1.0'
+  pod 'SwiftyJSON', '3.1.4'
 end
