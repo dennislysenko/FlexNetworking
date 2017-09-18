@@ -1,11 +1,7 @@
 //
-//  BetterNetworking.swift
-//  Riff
+//  FlexNetworking
 //
-//  Created by Dennis Lysenko on 7/24/15.
-//  Copyright © 2015 Riff Digital. All rights reserved.
-//
-//  Second iteration of our Objective-C based Networking class, building on Swift and the mouthwatering enum-powered SwiftyJSON library.
+//  A common sense sync-or-async networking lib with an ability to get results flexibly.
 //
 
 import Foundation
@@ -87,9 +83,9 @@ extension Dictionary {
 }
 
 public struct DictionaryBody: RequestBody {
-    fileprivate var queryDict: [String: AnyObject]
+    fileprivate var queryDict: [String: Any?]
     
-    public init(_ queryDict: [String: AnyObject]) {
+    public init(_ queryDict: [String: Any?]) {
         self.queryDict = queryDict
     }
     
