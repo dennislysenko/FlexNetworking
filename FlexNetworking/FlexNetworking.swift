@@ -66,7 +66,19 @@ extension Dictionary {
     fileprivate func getSerialization() -> String {
         var serialization = ""
         for (key, value) in self {
-            guard let encodedKey = "\(key)".urlEncoded(), let encodedValue = "\(value)".urlEncoded() else {
+            let mirror = Mirror(reflecting: value)
+            var valueString = "\(value)"
+            if let displayStyle = mirror.displayStyle {
+                switch displayStyle {
+                case .optional:
+                    if let some = mirror.children.first {
+                        valueString = "\(some.value)"
+                    }
+                default: break
+                }
+            }
+            
+            guard let encodedKey = "\(key)".urlEncoded(), let encodedValue = valueString.urlEncoded() else {
                 assert(false, "Error URLEncoding key or value.")
                 continue
             }
@@ -82,10 +94,24 @@ extension Dictionary {
     }
 }
 
-public struct DictionaryBody: RequestBody {
-    fileprivate var queryDict: [String: Any?]
+extension Dictionary: RequestBody {
+    public func getQueryString() -> String? {
+        return self.getSerialization()
+    }
     
-    public init(_ queryDict: [String: Any?]) {
+    public func getHTTPBody() -> Data? {
+        return self.getSerialization().data(using: .utf8)
+    }
+    
+    public func getContentType() -> String {
+        return "application/x-www-form-urlencoded"
+    }
+}
+
+public struct DictionaryBody: RequestBody {
+    fileprivate var queryDict: [String: Any]
+    
+    public init(_ queryDict: [String: Any]) {
         self.queryDict = queryDict
     }
     

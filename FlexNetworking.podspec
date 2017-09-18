@@ -8,8 +8,8 @@
 
 Pod::Spec.new do |s|
   s.name             = 'FlexNetworking'
-  s.version          = '0.1.0'
-  s.summary          = 'A common sense sync-or-async networking lib with an ability to get results flexibly. '
+  s.version          = '0.2.0'
+  s.summary          = 'A common sense sync-or-async networking lib with an ability to get results flexibly.'
 
 # This description is used to generate tags and improve search results.
 #   * Think: What does it do? Why did you write it? What is the focus?
