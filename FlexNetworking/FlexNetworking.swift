@@ -177,7 +177,7 @@ public struct Response: CustomStringConvertible {
 }
 
 open class FlexNetworking {
-    open class func runRequest(urlSession session: URLSession, path: String, method: String, body: RequestBody?) throws -> Response {
+    open class func runRequest(urlSession session: URLSession, path: String, method: String, body: RequestBody?, headers: [String: String] = [:]) throws -> Response {
         let sema = DispatchSemaphore(value: 0)
         
         guard let url = URL(string: path) else {
@@ -186,6 +186,8 @@ open class FlexNetworking {
         
         var request = URLRequest(url: url)
         request.httpMethod = method
+        
+        request.allHTTPHeaderFields = headers
         
         if method == "GET" {
             if let queryString = body?.getQueryString() {
@@ -199,6 +201,10 @@ open class FlexNetworking {
         } else {
             request.httpBody = body?.getHTTPBody()
             if let contentType = body?.getContentType() {
+                if let contentType = headers["Content-Type"] {
+                    print("Warning: Content-Type was set to \(contentType); will be overridden by RequestBody")
+                }
+                
                 request.addValue(contentType, forHTTPHeaderField: "Content-Type")
             }
         }
@@ -252,7 +258,7 @@ open class FlexNetworking {
 
 // MARK: - Async Network Methods
 extension FlexNetworking {
-    public class func runRequestAsync(_ urlSession: URLSession, path: String, method: String, body: RequestBody?, completion: ResultBlock?) {
+    public class func runRequestAsync(_ urlSession: URLSession, path: String, method: String, body: RequestBody?, headers: [String: String] = [:], completion: ResultBlock?) {
         DispatchQueue.global(qos: .userInitiated).async {
             do {
                 let response = try self.runRequest(urlSession: urlSession, path: path, method: method, body: body)
