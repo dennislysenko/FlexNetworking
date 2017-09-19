@@ -187,8 +187,6 @@ open class FlexNetworking {
         var request = URLRequest(url: url)
         request.httpMethod = method
         
-        request.allHTTPHeaderFields = headers
-        
         if method == "GET" {
             if let queryString = body?.getQueryString() {
                 let newPath = "\(path)?\(queryString)"
@@ -201,12 +199,12 @@ open class FlexNetworking {
         } else {
             request.httpBody = body?.getHTTPBody()
             if let contentType = body?.getContentType() {
-                if let contentType = headers["Content-Type"] {
-                    print("Warning: Content-Type was set to \(contentType); will be overridden by RequestBody")
-                }
-                
                 request.addValue(contentType, forHTTPHeaderField: "Content-Type")
             }
+        }
+        
+        headers.forEach { (header, value) in
+            request.setValue(value, forHTTPHeaderField: header)
         }
         
         var httpURLResponse: HTTPURLResponse?
