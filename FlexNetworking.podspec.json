@@ -1,0 +1,59 @@
+{
+  "authors": "Dennis Lysenko, Andriy Katkov",
+  "default_subspecs": [
+    "Core"
+  ],
+  "description": "Unlike other libraries which are either inflexible or not swifty enough (by our standards), Flex allows you to run any type of network request, any way you want it, in the Swiftiest way possible. Examples will be added to README later. I'm just putting this up so I can use it in a project because I've tried the networking alternatives and they all have glaring issues for my use case. Reach out to Dennis via email (dennis.s.lysenko AT gmail.com) if you have any question about how to do something using this lib and I'll add it to the README.",
+  "homepage": "https://github.com/dennislysenko/FlexNetworking",
+  "license": {
+    "text": "Copyright 2018 Dennis Lysenko",
+    "type": "Copyright"
+  },
+  "name": "FlexNetworking",
+  "platforms": {
+    "ios": "8.0"
+  },
+  "source": {
+    "git": "https://github.com/dennislysenko/FlexNetworking.git",
+    "tag": "v0.3"
+  },
+  "swift_version": "4.1",
+  "summary": "A common sense sync-or-async networking lib with an ability to get results flexibly, and bindings to SwiftyJSON, and RxSwift.",
+  "version": "0.3",
+  "subspecs": [
+    {
+      "dependencies": {
+      },
+      "name": "Core",
+      "source_files": [
+        "FlexNetworking/FlexNetworking.swift",
+        "FlexNetworking/FlexNetworking+Codable.swift"
+      ],
+      "user_target_xcconfig": {
+        "HEADER_SEARCH_PATHS": "$(inherited) ${PODS_ROOT}/Firebase/CoreOnly/Sources"
+      }
+    },
+    {
+      "dependencies": {
+        "FlexNetworking/Core": [
+        ],
+        "SwiftyJSON": "~> 3.1.0"
+      },
+      "source_files": [
+        "FlexNetworking/FlexNetworking+SwiftyJSON.swift"
+      ],
+      "name": "SwiftyJSON"
+    },
+    {
+      "dependencies": {
+        "FlexNetworking/Core": [
+        ],
+        "RxSwift": "~> 4.1.2"
+      },
+      "source_files": [
+        "FlexNetworking/FlexNetworking+RxSwift.swift"
+      ],
+      "name": "RxSwift"
+    }
+  ]
+}

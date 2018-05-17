@@ -13,11 +13,13 @@
 		9544D1341F707EE400F0D5E3 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9544D1321F707EE400F0D5E3 /* Main.storyboard */; };
 		9544D1361F707EE400F0D5E3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9544D1351F707EE400F0D5E3 /* Assets.xcassets */; };
 		9544D1391F707EE400F0D5E3 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9544D1371F707EE400F0D5E3 /* LaunchScreen.storyboard */; };
+		95DE40C820AD2E6500F9D32D /* FlexNetworking+SwiftyJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95DE40C720AD2E6500F9D32D /* FlexNetworking+SwiftyJSON.swift */; };
+		95DE40CA20AD2E6E00F9D32D /* FlexNetworking+RxSwift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95DE40C920AD2E6E00F9D32D /* FlexNetworking+RxSwift.swift */; };
+		95DE40CC20AD2E7600F9D32D /* FlexNetworking+Codable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95DE40CB20AD2E7600F9D32D /* FlexNetworking+Codable.swift */; };
 		95F6509A1F708C24003ED2C3 /* Pods_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 94E04039F2702A87AEB9D1AB /* Pods_Example.framework */; };
 		95F6509B1F708F64003ED2C3 /* FlexNetworking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95F9AB311D9AFA9200AACD19 /* FlexNetworking.swift */; };
 		95F9AB2B1D9AFA8600AACD19 /* FlexNetworking.h in Headers */ = {isa = PBXBuildFile; fileRef = 95F9AB291D9AFA8600AACD19 /* FlexNetworking.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		95F9AB321D9AFA9200AACD19 /* FlexNetworking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95F9AB311D9AFA9200AACD19 /* FlexNetworking.swift */; };
-		95F9AB351D9AFDDC00AACD19 /* FlexNetworking.podspec in Resources */ = {isa = PBXBuildFile; fileRef = 95F9AB331D9AFDDC00AACD19 /* FlexNetworking.podspec */; };
 		95F9AB361D9AFDDC00AACD19 /* Podfile in Resources */ = {isa = PBXBuildFile; fileRef = 95F9AB341D9AFDDC00AACD19 /* Podfile */; };
 		A18A571B49713B50635124A7 /* Pods_FlexNetworking.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9544D1421F707FC200F0D5E3 /* Pods_FlexNetworking.framework */; };
 /* End PBXBuildFile section */
@@ -34,11 +36,14 @@
 		9544D1381F707EE400F0D5E3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		9544D13A1F707EE400F0D5E3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9544D1421F707FC200F0D5E3 /* Pods_FlexNetworking.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Pods_FlexNetworking.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		95DE40C520AD0F9800F9D32D /* FlexNetworking.podspec.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = FlexNetworking.podspec.json; sourceTree = "<group>"; };
+		95DE40C720AD2E6500F9D32D /* FlexNetworking+SwiftyJSON.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FlexNetworking+SwiftyJSON.swift"; sourceTree = "<group>"; };
+		95DE40C920AD2E6E00F9D32D /* FlexNetworking+RxSwift.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FlexNetworking+RxSwift.swift"; sourceTree = "<group>"; };
+		95DE40CB20AD2E7600F9D32D /* FlexNetworking+Codable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FlexNetworking+Codable.swift"; sourceTree = "<group>"; };
 		95F9AB261D9AFA8600AACD19 /* FlexNetworking.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = FlexNetworking.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		95F9AB291D9AFA8600AACD19 /* FlexNetworking.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FlexNetworking.h; sourceTree = "<group>"; };
 		95F9AB2A1D9AFA8600AACD19 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		95F9AB311D9AFA9200AACD19 /* FlexNetworking.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlexNetworking.swift; sourceTree = "<group>"; };
-		95F9AB331D9AFDDC00AACD19 /* FlexNetworking.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = FlexNetworking.podspec; sourceTree = "<group>"; };
 		95F9AB341D9AFDDC00AACD19 /* Podfile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Podfile; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		A0A7AD305F2943AD02B7DA30 /* Pods_FlexNetworking.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FlexNetworking.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A7206651C76E3C3CF1062E76 /* Pods-Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Example.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Example/Pods-Example.debug.xcconfig"; sourceTree = "<group>"; };
@@ -103,7 +108,7 @@
 		95F9AB1C1D9AFA8600AACD19 = {
 			isa = PBXGroup;
 			children = (
-				95F9AB331D9AFDDC00AACD19 /* FlexNetworking.podspec */,
+				95DE40C520AD0F9800F9D32D /* FlexNetworking.podspec.json */,
 				95F9AB341D9AFDDC00AACD19 /* Podfile */,
 				95F9AB281D9AFA8600AACD19 /* FlexNetworking */,
 				9544D12D1F707EE400F0D5E3 /* Example */,
@@ -128,6 +133,9 @@
 				95F9AB291D9AFA8600AACD19 /* FlexNetworking.h */,
 				95F9AB2A1D9AFA8600AACD19 /* Info.plist */,
 				95F9AB311D9AFA9200AACD19 /* FlexNetworking.swift */,
+				95DE40C720AD2E6500F9D32D /* FlexNetworking+SwiftyJSON.swift */,
+				95DE40C920AD2E6E00F9D32D /* FlexNetworking+RxSwift.swift */,
+				95DE40CB20AD2E7600F9D32D /* FlexNetworking+Codable.swift */,
 			);
 			path = FlexNetworking;
 			sourceTree = "<group>";
@@ -155,7 +163,6 @@
 				9544D1291F707EE400F0D5E3 /* Frameworks */,
 				9544D12A1F707EE400F0D5E3 /* Resources */,
 				6E43814380A7FC259F64BA0E /* [CP] Embed Pods Frameworks */,
-				DDA73A561A878D9FA22FA7BE /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -175,7 +182,6 @@
 				95F9AB221D9AFA8600AACD19 /* Frameworks */,
 				95F9AB231D9AFA8600AACD19 /* Headers */,
 				95F9AB241D9AFA8600AACD19 /* Resources */,
-				5A3399AE3EA251072F31BD5E /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -193,7 +199,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0900;
-				LastUpgradeCheck = 0900;
+				LastUpgradeCheck = 0930;
 				ORGANIZATIONNAME = "Dennis Lysenko";
 				TargetAttributes = {
 					9544D12B1F707EE400F0D5E3 = {
@@ -244,7 +250,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				95F9AB361D9AFDDC00AACD19 /* Podfile in Resources */,
-				95F9AB351D9AFDDC00AACD19 /* FlexNetworking.podspec in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -257,13 +262,16 @@
 			files = (
 			);
 			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
 			);
 			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-FlexNetworking-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 		23B1B9CF3920B674FB8F0C2B /* [CP] Check Pods Manifest.lock */ = {
@@ -272,28 +280,16 @@
 			files = (
 			);
 			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
 			);
 			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Example-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
-			showEnvVarsInLog = 0;
-		};
-		5A3399AE3EA251072F31BD5E /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-FlexNetworking/Pods-FlexNetworking-resources.sh\"\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 		6E43814380A7FC259F64BA0E /* [CP] Embed Pods Frameworks */ = {
@@ -302,28 +298,18 @@
 			files = (
 			);
 			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-Example/Pods-Example-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/RxSwift/RxSwift.framework",
+				"${BUILT_PRODUCTS_DIR}/SwiftyJSON/SwiftyJSON.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxSwift.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyJSON.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Example/Pods-Example-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		DDA73A561A878D9FA22FA7BE /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Example/Pods-Example-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -343,7 +329,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				95DE40CA20AD2E6E00F9D32D /* FlexNetworking+RxSwift.swift in Sources */,
+				95DE40C820AD2E6500F9D32D /* FlexNetworking+SwiftyJSON.swift in Sources */,
 				95F9AB321D9AFA9200AACD19 /* FlexNetworking.swift in Sources */,
+				95DE40CC20AD2E7600F9D32D /* FlexNetworking+Codable.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -426,6 +415,7 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
@@ -433,6 +423,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
@@ -467,6 +458,8 @@
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
+				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
@@ -486,6 +479,7 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
@@ -493,6 +487,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
@@ -519,6 +514,8 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
+				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -544,7 +541,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 4.0;
 			};
 			name = Debug;
@@ -566,7 +563,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.riffdigital.FlexNetworking;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
-				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 4.0;
 			};
 			name = Release;

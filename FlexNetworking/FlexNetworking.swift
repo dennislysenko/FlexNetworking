@@ -5,7 +5,6 @@
 //
 
 import Foundation
-import SwiftyJSON
 
 public enum Result<T>: CustomStringConvertible {
     case success(T)
@@ -27,7 +26,26 @@ public enum RequestError: Error {
     case noInternet(Error)
     case miscURLSessionError(Error)
     case invalidURL(message: String)
-    case unknownError
+    case emptyResponseError(Response)
+    case cancelledByCaller
+    case unknownError(message: String)
+
+    public var localizedDescription: String {
+        switch self {
+        case .noInternet(let error):
+            return "No internet (underlying error: \(error))"
+        case .miscURLSessionError(let error):
+            return "Miscellaneous URL session error. Underlying error code: \((error as NSError).code)\n\(error.localizedDescription)"
+        case .invalidURL(let message):
+            return "Invalid URL. Message: \(message)"
+        case .emptyResponseError(let response):
+            return "Response had no data; status was \(response.status)"
+        case .cancelledByCaller:
+            return "Request was cancelled by the caller"
+        case .unknownError(let message):
+            return "Unknown error. Message: \(message)"
+        }
+    }
 }
 
 public protocol RequestBody {
@@ -41,30 +59,16 @@ public protocol RequestBody {
     func getContentType() -> String
 }
 
-/// Convenience to let you easily pass a JSON object as a request body. JSON should only be used with non-GET requests.
-extension JSON: RequestBody {
-    public func getQueryString() -> String? {
-        assert(false, "Do not use JSON with GET requests.")
-        return nil
-    }
-    public func getHTTPBody() -> Data? {
-        return self.rawString()?.data(using: .utf8, allowLossyConversion: false)
-    }
-    public func getContentType() -> String {
-        return "application/json"
-    }
-}
-
 let disallowedCharactersSet = CharacterSet(charactersIn: "!*'();:@&=+$,/?%#[] <>")
 extension String {
-    func urlEncoded() -> String? {
+    internal func urlEncoded() -> String? {
         return self.addingPercentEncoding(withAllowedCharacters: disallowedCharactersSet.inverted)
     }
 }
 
 extension Dictionary {
-    fileprivate func getSerialization() -> String {
-        var serialization = ""
+    internal func getSerialization() -> String {
+        var serialization: [String] = []
         for (key, value) in self {
             let mirror = Mirror(reflecting: value)
             var valueString = "\(value)"
@@ -83,14 +87,10 @@ extension Dictionary {
                 continue
             }
             
-            serialization += "\(encodedKey)=\(encodedValue)&"
+            serialization.append("\(encodedKey)=\(encodedValue)")
         }
-        
-        if serialization.characters.count > 0 {
-            serialization = serialization.substring(to: serialization.characters.index(before: serialization.endIndex))
-        }
-        
-        return serialization
+
+        return serialization.joined(separator: "&")
     }
 }
 
@@ -108,8 +108,9 @@ extension Dictionary: RequestBody {
     }
 }
 
+@available (*, deprecated, message: "Pass Dictionary instance directly instead of wrapping it in a DictionaryBody() constructor.")
 public struct DictionaryBody: RequestBody {
-    fileprivate var queryDict: [String: Any]
+    private let queryDict: [String: Any]
     
     public init(_ queryDict: [String: Any]) {
         self.queryDict = queryDict
@@ -120,15 +121,15 @@ public struct DictionaryBody: RequestBody {
     }
     
     public func getHTTPBody() -> Data? {
-        return self.getQueryString()?.data(using: String.Encoding.utf8)
+        return self.getQueryString()?.data(using: .utf8)
     }
     
     public func getContentType() -> String {
-        return "application/x-www-form-urlencoded"
+        return queryDict.getContentType()
     }
 }
 
-/// RawData is a special case. It is always directly written to the HTTP body and you must specify your own Content-Type. This gives you full control over the body of the request.
+/// RawBody allows you to specify data bytes with a given content-type, so you can pass any request body (incl. multipart form data).
 /// NB: On a GET request, a RawData body WILL be ignored.
 public struct RawBody: RequestBody {
     public let data: Data
@@ -158,13 +159,10 @@ public struct Response: CustomStringConvertible {
     
     public let rawData: Data?
     public let asString: String?
-    public let asJSON: JSON?
     
     public var description: String {
         let bodyDescription: String
-        if let json = self.asJSON {
-            bodyDescription = "\(json)"
-        } else if let string = self.asString {
+        if let string = self.asString {
             bodyDescription = string
         } else if let data = self.rawData {
             bodyDescription = "\(data.count) bytes"
@@ -177,16 +175,14 @@ public struct Response: CustomStringConvertible {
 }
 
 open class FlexNetworking {
-    open class func runRequest(urlSession session: URLSession, path: String, method: String, body: RequestBody?, headers: [String: String] = [:]) throws -> Response {
-        let sema = DispatchSemaphore(value: 0)
-        
+    open class func getTaskForRequest(urlSession session: URLSession, path: String, method: String, body: RequestBody?, headers: [String: String] = [:], completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) throws -> URLSessionTask {
         guard let url = URL(string: path) else {
             throw RequestError.invalidURL(message: "Invalid URL \(path)")
         }
-        
+
         var request = URLRequest(url: url)
         request.httpMethod = method
-        
+
         if method == "GET" {
             if let queryString = body?.getQueryString() {
                 let newPath = "\(path)?\(queryString)"
@@ -202,55 +198,55 @@ open class FlexNetworking {
                 request.addValue(contentType, forHTTPHeaderField: "Content-Type")
             }
         }
-        
+
         headers.forEach { (header, value) in
             request.setValue(value, forHTTPHeaderField: header)
         }
-        
-        var httpURLResponse: HTTPURLResponse?
-        var requestError: Error?
-        var responseData: Data?
-        let task = session.dataTask(with: request, completionHandler: { (data: Data?, urlResponse: URLResponse?, error: Error?) -> Void in
-            responseData = data
-            httpURLResponse = urlResponse as? HTTPURLResponse
-            requestError = error
-            
-            sema.signal()
-        }) 
-        
-        task.resume()
-        let _ = sema.wait(timeout: DispatchTime.distantFuture)
-        
-        let response: Response
+
+        return session.dataTask(with: request, completionHandler: completionHandler)
+    }
+
+    open class func parseNetworkResponse(responseData: Data?, httpURLResponse: HTTPURLResponse?, requestError: Error?) throws -> Response {
         if let httpURLResponse = httpURLResponse {
-            let status = httpURLResponse.statusCode
-            var asString: String? = nil
-            var asJSON: JSON? = nil
-            
-            if let responseData = responseData {
-                if let stringResponse = NSString(data: responseData, encoding: String.Encoding.utf8.rawValue) {
-                    asString = String(stringResponse)
-                }
-                
-                if let jsonSerialization = try? JSONSerialization.jsonObject(with: responseData, options: .allowFragments) {
-                    asJSON = JSON(jsonSerialization)
-                }
-            }
-            
-            response = Response(status: status, rawData: responseData, asString: asString, asJSON: asJSON)
+            return Response(
+                status: httpURLResponse.statusCode,
+                rawData: responseData,
+                asString: responseData.flatMap({ data in String(data: data, encoding: .utf8) })
+            )
         } else if let requestError = requestError {
             if (requestError as NSError).code == -1020 {
                 // No Internet code
                 throw RequestError.noInternet(requestError)
+            } else if (requestError as NSError).code == -999 {
+                // Cancelled NSError code
+                throw RequestError.cancelledByCaller
             } else {
                 throw RequestError.miscURLSessionError(requestError)
             }
         } else {
-            assert(false, "Nil response and nil error :(")
-            throw RequestError.unknownError
+            assert(false, "nil response and nil error")
+            throw RequestError.unknownError(message: "Nil response and nil error in completion handler")
         }
-        
-        return response
+    }
+
+    open class func runRequest(urlSession session: URLSession, path: String, method: String, body: RequestBody?, headers: [String: String] = [:]) throws -> Response {
+        let sema = DispatchSemaphore(value: 0)
+
+        var httpURLResponse: HTTPURLResponse?
+        var requestError: Error?
+        var responseData: Data?
+        let task = try self.getTaskForRequest(urlSession: session, path: path, method: method, body: body, headers: headers) { (data: Data?, urlResponse: URLResponse?, error: Error?) -> Void in
+            responseData = data
+            httpURLResponse = urlResponse as? HTTPURLResponse
+            requestError = error
+
+            sema.signal()
+        }
+
+        task.resume()
+        let _ = sema.wait(timeout: DispatchTime.distantFuture)
+
+        return try self.parseNetworkResponse(responseData: responseData, httpURLResponse: httpURLResponse, requestError: requestError)
     }
 }
 
@@ -260,9 +256,13 @@ extension FlexNetworking {
         DispatchQueue.global(qos: .userInitiated).async {
             do {
                 let response = try self.runRequest(urlSession: urlSession, path: path, method: method, body: body)
-                DispatchQueue.main.async { completion?(.success(response)) }
+                DispatchQueue.main.async {
+                    completion?(.success(response))
+                }
             } catch let error {
-                DispatchQueue.main.async { completion?(.failure(error)) }
+                DispatchQueue.main.async {
+                    completion?(.failure(error))
+                }
             }
         }
     }
