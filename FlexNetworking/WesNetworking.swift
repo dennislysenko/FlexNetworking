@@ -1,5 +1,5 @@
 //
-//  FlexNetworking
+//  WesNetworking
 //
 //  A common sense sync-or-async networking lib with an ability to get results flexibly.
 //
@@ -176,7 +176,7 @@ public struct Response: CustomStringConvertible {
     }
 }
 
-open class FlexNetworking {
+open class WesNetworking {
     open class func runRequest(urlSession session: URLSession, path: String, method: String, body: RequestBody?, headers: [String: String] = [:]) throws -> Response {
         let sema = DispatchSemaphore(value: 0)
         
@@ -255,7 +255,7 @@ open class FlexNetworking {
 }
 
 // MARK: - Async Network Methods
-extension FlexNetworking {
+extension WesNetworking {
     public class func runRequestAsync(_ urlSession: URLSession, path: String, method: String, body: RequestBody?, headers: [String: String] = [:], completion: ResultBlock?) {
         DispatchQueue.global(qos: .userInitiated).async {
             do {
