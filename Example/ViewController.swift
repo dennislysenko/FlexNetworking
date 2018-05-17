@@ -20,7 +20,7 @@ class ViewController: UIViewController {
     }
     
     func test() {
-        let body1 = DictionaryBody(["test": "test2"])
+        let body1 = ["test": "test2"]
         assert(body1.getQueryString() == "test=test2")
         
         let dict1: [String: Any] = ["test": 2]
