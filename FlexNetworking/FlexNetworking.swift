@@ -174,7 +174,62 @@ public struct Response: CustomStringConvertible {
     }
 }
 
+public typealias RequestParameters = (urlSession: URLSession, path: String, method: String, body: RequestBody?, headers: [String: String])
+
+public protocol PreRequestHook {
+    func execute(on requestParameters: RequestParameters) throws -> RequestParameters
+}
+
+public struct BlockPreRequestHook: PreRequestHook {
+    public typealias Block = (RequestParameters) throws -> RequestParameters
+
+    public let block: Block
+
+    public init(block: @escaping Block) {
+        self.block = block
+    }
+
+    public func execute(on requestParameters: RequestParameters) throws -> RequestParameters {
+        return try block(requestParameters)
+    }
+}
+
+public enum PostRequestHookResult {
+    /// Continues to the next hook in the chain, passing the unmodified last response as input to it.
+    case `continue`
+
+    /// Skips the rest of the chain, passing the current response to whatever completion handler was specified on the initial request.
+    case completed
+
+    /// Makes a new request, and passes the result of that request to the next post-request hook.
+    case makeNewRequest(RequestParameters)
+}
+
+public protocol PostRequestHook {
+    func execute(lastResponse: Response, originalRequestParameters: RequestParameters) throws -> PostRequestHookResult
+}
+
+public struct BlockPostRequestHook: PostRequestHook {
+    public typealias Block = (_ lastResponse: Response, _ originalRequestParameters: RequestParameters) throws -> PostRequestHookResult
+
+    public let block: Block
+
+    public init(block: @escaping Block) {
+        self.block = block
+    }
+
+    public func execute(lastResponse: Response, originalRequestParameters: RequestParameters) throws -> PostRequestHookResult {
+        return try block(lastResponse, originalRequestParameters)
+    }
+}
+
 open class FlexNetworking {
+    public static var preRequestHooks: [PreRequestHook] = []
+    public static var postRequestHooks: [PostRequestHook] = []
+
+    public static var defaultEncoder = JSONEncoder()
+    public static var defaultDecoder = JSONDecoder()
+
     open class func getTaskForRequest(urlSession session: URLSession, path: String, method: String, body: RequestBody?, headers: [String: String] = [:], completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) throws -> URLSessionTask {
         guard let url = URL(string: path) else {
             throw RequestError.invalidURL(message: "Invalid URL \(path)")
@@ -230,18 +285,65 @@ open class FlexNetworking {
     }
 
     open class func runRequest(urlSession session: URLSession, path: String, method: String, body: RequestBody?, headers: [String: String] = [:]) throws -> Response {
+        let startingRequestParameters: RequestParameters = (session, path, method, body, headers)
+        let finalRequestParameters = try preRequestHooks.reduce(startingRequestParameters) { (requestParameters, hook) -> RequestParameters in
+            return try hook.execute(on: startingRequestParameters)
+        }
+
+        let initialResponse = try self.runRequestWithoutHooks(
+            urlSession: finalRequestParameters.urlSession,
+            path: finalRequestParameters.path,
+            method: finalRequestParameters.method,
+            body: finalRequestParameters.body,
+            headers: finalRequestParameters.headers)
+
+        var lastResponse = initialResponse
+
+        for hook in self.postRequestHooks {
+            let result = try hook.execute(lastResponse: lastResponse, originalRequestParameters: finalRequestParameters)
+
+            var breakLoop = false
+
+            switch result {
+            case .completed:
+                breakLoop = true
+            case .continue:
+                continue
+            case .makeNewRequest(let (urlSession, path, method, body, headers)):
+                lastResponse = try self.runRequestWithoutHooks(urlSession: urlSession, path: path, method: method, body: body, headers: headers)
+            }
+
+            if breakLoop {
+                break
+            }
+        }
+
+        let finalResponse = lastResponse
+
+        return finalResponse
+    }
+
+    open class func runRequestWithoutHooks(urlSession session: URLSession, path: String, method: String, body: RequestBody?, headers: [String: String] = [:]) throws -> Response {
         let sema = DispatchSemaphore(value: 0)
 
         var httpURLResponse: HTTPURLResponse?
         var requestError: Error?
         var responseData: Data?
-        let task = try self.getTaskForRequest(urlSession: session, path: path, method: method, body: body, headers: headers) { (data: Data?, urlResponse: URLResponse?, error: Error?) -> Void in
-            responseData = data
-            httpURLResponse = urlResponse as? HTTPURLResponse
-            requestError = error
 
-            sema.signal()
-        }
+        let task = try self.getTaskForRequest(
+            urlSession: session,
+            path: path,
+            method: method,
+            body: body,
+            headers: headers,
+            completionHandler: { (data: Data?, urlResponse: URLResponse?, error: Error?) -> Void in
+                responseData = data
+                httpURLResponse = urlResponse as? HTTPURLResponse
+                requestError = error
+
+                sema.signal()
+            }
+        )
 
         task.resume()
         let _ = sema.wait(timeout: DispatchTime.distantFuture)
