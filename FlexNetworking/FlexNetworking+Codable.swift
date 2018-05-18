@@ -11,7 +11,7 @@ import Foundation
 public struct JSONEncodable<E: Encodable>: RequestBody {
     public let data: Data
 
-    public init(_ encodable: E, using encoder: JSONEncoder = JSONEncoder()) throws {
+    public init(_ encodable: E, using encoder: JSONEncoder = FlexNetworking.defaultEncoder) throws {
         self.data = try encoder.encode(encodable)
     }
 
@@ -30,7 +30,7 @@ public struct JSONEncodable<E: Encodable>: RequestBody {
 }
 
 extension Decodable {
-    public static func decode(from response: Response, using decoder: JSONDecoder) throws -> Self {
+    public static func decode(from response: Response, using decoder: JSONDecoder = FlexNetworking.defaultDecoder) throws -> Self {
         guard let data = response.rawData else {
             throw RequestError.emptyResponseError(response)
         }
