@@ -11,8 +11,9 @@ import Foundation
 public struct JSONEncodable<E: Encodable>: RequestBody {
     public let data: Data
 
-    public init(_ encodable: E, using encoder: JSONEncoder = FlexNetworking.defaultEncoder) throws {
-        self.data = try encoder.encode(encodable)
+    public init(_ encodable: E, using encoder: JSONEncoder? = nil) throws {
+        let usableEncoder = encoder ?? FlexNetworking.default.defaultEncoder
+        self.data = try usableEncoder.encode(encodable)
     }
 
     public func getQueryString() -> String? {
@@ -30,11 +31,13 @@ public struct JSONEncodable<E: Encodable>: RequestBody {
 }
 
 extension Decodable {
-    public static func decode(from response: Response, using decoder: JSONDecoder = FlexNetworking.defaultDecoder) throws -> Self {
+    public static func decode(from response: Response, using decoder: JSONDecoder? = nil) throws -> Self {
+        let usableDecoder = decoder ?? FlexNetworking.default.defaultDecoder
+
         guard let data = response.rawData else {
             throw RequestError.emptyResponseError(response)
         }
 
-        return try decoder.decode(Self.self, from: data)
+        return try usableDecoder.decode(Self.self, from: data)
     }
 }

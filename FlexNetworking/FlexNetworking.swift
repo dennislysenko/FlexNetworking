@@ -223,14 +223,32 @@ public struct BlockPostRequestHook: PostRequestHook {
     }
 }
 
-open class FlexNetworking {
-    public static var preRequestHooks: [PreRequestHook] = []
-    public static var postRequestHooks: [PostRequestHook] = []
+public class FlexNetworking {
+    public let preRequestHooks: [PreRequestHook]
+    public let postRequestHooks: [PostRequestHook]
 
-    public static var defaultEncoder = JSONEncoder()
-    public static var defaultDecoder = JSONDecoder()
+    public let defaultEncoder: JSONEncoder
+    public let defaultDecoder: JSONDecoder
 
-    open class func getTaskForRequest(urlSession session: URLSession, path: String, method: String, body: RequestBody?, headers: [String: String] = [:], completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) throws -> URLSessionTask {
+    static let `default` = FlexNetworking()
+
+    public init(preRequestHooks: [PreRequestHook] = [],
+        postRequestHooks: [PostRequestHook] = [],
+        defaultEncoder: JSONEncoder = JSONEncoder(),
+        defaultDecoder: JSONDecoder = JSONDecoder()) {
+
+        self.preRequestHooks = preRequestHooks
+        self.postRequestHooks = postRequestHooks
+        self.defaultEncoder = defaultEncoder
+        self.defaultDecoder = defaultDecoder
+    }
+
+    // MARK: - Request Methods
+
+    ///
+    /// Creates a URLSessionTask for a single HTTP request with request parameters specified in FlexNetworking notation.
+    ///
+    public func getTaskForRequest(urlSession session: URLSession, path: String, method: String, body: RequestBody?, headers: [String: String] = [:], completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) throws -> URLSessionTask {
         guard let url = URL(string: path) else {
             throw RequestError.invalidURL(message: "Invalid URL \(path)")
         }
@@ -261,7 +279,10 @@ open class FlexNetworking {
         return session.dataTask(with: request, completionHandler: completionHandler)
     }
 
-    open class func parseNetworkResponse(responseData: Data?, httpURLResponse: HTTPURLResponse?, requestError: Error?) throws -> Response {
+    ///
+    /// Parses the result of a URLSessionTask completion handler into a Flex-standard `Response`, or throws a `RequestError`.
+    ///
+    public func parseNetworkResponse(responseData: Data?, httpURLResponse: HTTPURLResponse?, requestError: Error?) throws -> Response {
         if let httpURLResponse = httpURLResponse {
             return Response(
                 status: httpURLResponse.statusCode,
@@ -284,7 +305,33 @@ open class FlexNetworking {
         }
     }
 
-    open class func runRequest(urlSession session: URLSession, path: String, method: String, body: RequestBody?, headers: [String: String] = [:]) throws -> Response {
+    ///
+    /// Runs a synchronous HTTP request.
+    ///
+    /// You may specify any `method` supported by `URLRequest`.
+    /// The `path` should be an absolute URL, or else a `RequestError.invalidURL` error will be thrown.
+    ///
+    /// For a GET request body, you may pass:
+    /// - nil, corresponding to a lack of a query string.
+    /// - A shallow dictionary, which will be serialized into a URL-encoded query string.
+    ///
+    /// For a POST/PATCH request body, you may pass:
+    /// - nil, corresponding to an empty request body.
+    /// - A shallow dictionary, which will be interpreted as URL-encoded form data, with the 'Content-Type' header defaulting to `application/x-www-form-urlencoded` unless otherwise specified in `headers`.
+    /// - An instance of `JSONEncodable`, which is populated with an instance of an `Encodable`-conforming type. The instance will be encoded and passed as JSON data, with the 'Content-Type' header defaulting to `application/json` unless otherwise specified in `headers`.
+    /// - An instance of `RawBody`, which will pass through a `Data` object, with the 'Content-Type' header set to whatever is specified in the RawBody instance, unless otherwise specified in `headers`.
+    /// - (*if the 'FlexNetworking/SwiftyJSON' subpod is installed*) A deep `JSON` instance, which will be passed as JSON data, with the 'Content-Type' header defaulting to `application/json` unless otherwise specified in `headers`.
+    ///
+    /// Headers are specified as a dictionary.
+    /// If a 'Content-Type' header is specified, it will overwrite the 'Content-Type' taken from the `body` parameter, if present.
+    ///
+    /// Returns a `Response` or throws a miscellaneous error, which may be a `RequestError`, or any error thrown from a member of `preRequestHooks` or `postRequestHooks`.
+    ///
+    /// Authorization and a default endpoint URL can be implemented via `preRequestHooks`.
+    /// Token refresh can be implemented via `postRequestHooks`.
+    /// Custom functionality that does not fit in `preRequestHooks` or `postRequestHooks` can be implemented by creating an extension of FlexNetworking with methods adopting the signatures you need, and delegating to internal FlexNetworking methods from those extension methods.
+    ///
+    public func runRequest(urlSession session: URLSession, path: String, method: String, body: RequestBody?, headers: [String: String] = [:]) throws -> Response {
         let startingRequestParameters: RequestParameters = (session, path, method, body, headers)
         let finalRequestParameters = try preRequestHooks.reduce(startingRequestParameters) { (requestParameters, hook) -> RequestParameters in
             return try hook.execute(on: startingRequestParameters)
@@ -323,7 +370,29 @@ open class FlexNetworking {
         return finalResponse
     }
 
-    open class func runRequestWithoutHooks(urlSession session: URLSession, path: String, method: String, body: RequestBody?, headers: [String: String] = [:]) throws -> Response {
+    ///
+    /// Runs a synchronous HTTP request, skipping any hooks defined in `preRequestHooks` or `postRequestHooks`.
+    ///
+    /// You may specify any `method` supported by `URLRequest`.
+    /// The `path` should be an absolute URL, or else a `RequestError.invalidURL` error will be thrown.
+    ///
+    /// For a GET request body, you may pass:
+    /// - nil, corresponding to a lack of a query string.
+    /// - A shallow dictionary, which will be serialized into a URL-encoded query string.
+    ///
+    /// For a POST/PATCH request body, you may pass:
+    /// - nil, corresponding to an empty request body.
+    /// - A shallow dictionary, which will be interpreted as URL-encoded form data, with the 'Content-Type' header defaulting to `application/x-www-form-urlencoded` unless otherwise specified in `headers`.
+    /// - An instance of `JSONEncodable`, which is populated with an instance of an `Encodable`-conforming type. The instance will be encoded and passed as JSON data, with the 'Content-Type' header defaulting to `application/json` unless otherwise specified in `headers`.
+    /// - An instance of `RawBody`, which will pass through a `Data` object, with the 'Content-Type' header set to whatever is specified in the RawBody instance, unless otherwise specified in `headers`.
+    /// - (*if the 'FlexNetworking/SwiftyJSON' subpod is installed*) A deep `JSON` instance, which will be passed as JSON data, with the 'Content-Type' header defaulting to `application/json` unless otherwise specified in `headers`.
+    ///
+    /// Headers are specified as a dictionary.
+    /// If a 'Content-Type' header is specified, it will overwrite the 'Content-Type' taken from the `body` parameter, if present.
+    ///
+    /// Returns a `Response` or throws a `RequestError`.
+    ///
+    public func runRequestWithoutHooks(urlSession session: URLSession, path: String, method: String, body: RequestBody?, headers: [String: String] = [:]) throws -> Response {
         let sema = DispatchSemaphore(value: 0)
 
         var httpURLResponse: HTTPURLResponse?
@@ -350,11 +419,35 @@ open class FlexNetworking {
 
         return try self.parseNetworkResponse(responseData: responseData, httpURLResponse: httpURLResponse, requestError: requestError)
     }
-}
 
-// MARK: - Async Network Methods
-extension FlexNetworking {
-    public class func runRequestAsync(_ urlSession: URLSession, path: String, method: String, body: RequestBody?, headers: [String: String] = [:], completion: ResultBlock?) {
+    ///
+    /// Runs an HTTP request asynchronously with no cancel mechanism.
+    ///
+    /// You may specify any `method` supported by `URLRequest`.
+    /// The `path` should be an absolute URL, or else a `RequestError.invalidURL` error will be thrown.
+    ///
+    /// For a GET request body, you may pass:
+    /// - nil, corresponding to a lack of a query string.
+    /// - A shallow dictionary, which will be serialized into a URL-encoded query string.
+    ///
+    /// For a POST/PATCH request body, you may pass:
+    /// - nil, corresponding to an empty request body.
+    /// - A shallow dictionary, which will be interpreted as URL-encoded form data, with the 'Content-Type' header defaulting to `application/x-www-form-urlencoded` unless otherwise specified in `headers`.
+    /// - An instance of `JSONEncodable`, which is populated with an instance of an `Encodable`-conforming type. The instance will be encoded and passed as JSON data, with the 'Content-Type' header defaulting to `application/json` unless otherwise specified in `headers`.
+    /// - An instance of `RawBody`, which will pass through a `Data` object, with the 'Content-Type' header set to whatever is specified in the RawBody instance, unless otherwise specified in `headers`.
+    /// - (*if the 'FlexNetworking/SwiftyJSON' subpod is installed*) A deep `JSON` instance, which will be passed as JSON data, with the 'Content-Type' header defaulting to `application/json` unless otherwise specified in `headers`.
+    ///
+    /// Headers are specified as a dictionary.
+    /// If a 'Content-Type' header is specified, it will overwrite the 'Content-Type' taken from the `body` parameter, if present.
+    ///
+    /// `completion` will be called exactly once with a `Result<Response>` monad encoding either a `Response` or a miscellaneous error, which may be a `RequestError`, or any error thrown from a member of `preRequestHooks` or `postRequestHooks`.
+    ///
+    /// Authorization and a default endpoint URL can be implemented via `preRequestHooks`.
+    /// Token refresh can be implemented via `postRequestHooks`.
+    /// Custom functionality that does not fit in `preRequestHooks` or `postRequestHooks` can be implemented by creating an extension of FlexNetworking with methods adopting the signatures you need, and delegating to internal FlexNetworking methods from those extension methods.
+    /// If you need a cancel mechanism, look into the 'FlexNetworking/RxSwift' subpod.
+    ///
+    public func runRequestAsync(_ urlSession: URLSession, path: String, method: String, body: RequestBody?, headers: [String: String] = [:], completion: ResultBlock?) {
         DispatchQueue.global(qos: .userInitiated).async {
             do {
                 let response = try self.runRequest(urlSession: urlSession, path: path, method: method, body: body)
@@ -368,4 +461,18 @@ extension FlexNetworking {
             }
         }
     }
+
+    // MARK: - Rx Stub
+
+    /// Provides reactive versions of `FlexNetworking` methods.
+    /// Accessed via the `rx` property on a `FlexNetworking` instance, which is only available if the 'FlexNetworking/RxSwift' subpod is installed.
+    public class Rx {
+        internal let flex: FlexNetworking
+
+        internal init(flex: FlexNetworking) {
+            self.flex = flex
+        }
+    }
+
+    internal lazy var _rx = Rx(flex: self)
 }
