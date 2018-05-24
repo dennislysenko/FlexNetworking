@@ -159,6 +159,8 @@ public struct Response: CustomStringConvertible {
     
     public let rawData: Data?
     public let asString: String?
+
+    public let requestParameters: RequestParameters
     
     public var description: String {
         let bodyDescription: String
@@ -282,12 +284,13 @@ public class FlexNetworking {
     ///
     /// Parses the result of a URLSessionTask completion handler into a Flex-standard `Response`, or throws a `RequestError`.
     ///
-    public func parseNetworkResponse(responseData: Data?, httpURLResponse: HTTPURLResponse?, requestError: Error?) throws -> Response {
+    public func parseNetworkResponse(originalRequestParameters: RequestParameters, responseData: Data?, httpURLResponse: HTTPURLResponse?, requestError: Error?) throws -> Response {
         if let httpURLResponse = httpURLResponse {
             return Response(
                 status: httpURLResponse.statusCode,
                 rawData: responseData,
-                asString: responseData.flatMap({ data in String(data: data, encoding: .utf8) })
+                asString: responseData.flatMap({ data in String(data: data, encoding: .utf8) }),
+                requestParameters: originalRequestParameters
             )
         } else if let requestError = requestError {
             if (requestError as NSError).code == -1020 {
@@ -417,7 +420,12 @@ public class FlexNetworking {
         task.resume()
         let _ = sema.wait(timeout: DispatchTime.distantFuture)
 
-        return try self.parseNetworkResponse(responseData: responseData, httpURLResponse: httpURLResponse, requestError: requestError)
+        return try self.parseNetworkResponse(
+            originalRequestParameters: (session, path, method, body, headers),
+            responseData: responseData,
+            httpURLResponse: httpURLResponse,
+            requestError: requestError
+        )
     }
 
     ///

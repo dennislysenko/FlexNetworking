@@ -35,7 +35,11 @@ extension FlexNetworking.Rx {
                     headers: headers,
                     completionHandler: { (data, response, error) in
                         do {
-                            observer(.success(try self.flex.parseNetworkResponse(responseData: data, httpURLResponse: response as? HTTPURLResponse, requestError: error)))
+                            observer(.success(try self.flex.parseNetworkResponse(
+                                originalRequestParameters: (session, path, method, body, headers),
+                                responseData: data,
+                                httpURLResponse: response as? HTTPURLResponse,
+                                requestError: error)))
                         } catch let error {
                             observer(.error(error))
                         }
@@ -107,7 +111,15 @@ extension FlexNetworking.Rx {
 
         let finalResponse = lastResponse
 
-        return finalResponse.map { (response, _, _) in response }
+        return finalResponse
+            .map { (response, _, _) in response }
+            .observeOn(MainScheduler.instance)
+            .subscribeOn(ConcurrentDispatchQueueScheduler(queue: DispatchQueue.global(qos: .default)))
+    }
+
+    public struct DecodingError: Error {
+        public let error: Error
+        public let response: Response
     }
 
     ///
@@ -151,10 +163,43 @@ extension FlexNetworking.Rx {
                 let output = try OutputDTO.decode(from: response, using: usableDecoder)
                 return Single.just(output)
             } catch let error {
-                return Single.error(error)
+                return Single.error(DecodingError(error: error, response: response))
             }
         })
 
         return output
     }
+
+    ///
+    /// Creates a Single observable corresponding to the result of a FlexNetworking request where the result is automatically decoded as a specified Decodable type.
+    /// When the returned Single is disposed, it cancels the task corresponding to the request initiated by the observable.
+    ///
+    /// You can specify a `decoder` to customize JSON decoding behavior.
+    /// If nil, or omitted (equivalent), the default decoder from the parent FlexNetworking instance will simply be used.
+    ///
+    public func requestCodable<OutputDTO: Decodable>(
+        urlSession session: URLSession = .shared,
+        decoder: JSONDecoder? = nil,
+        path: String,
+        method: String,
+        body: RequestBody?,
+        headers: [String: String] = [:]
+    ) -> Single<OutputDTO> {
+
+        let usableDecoder = decoder ?? self.flex.defaultDecoder
+
+        let response = self.runRequest(urlSession: session, path: path, method: method, body: body, headers: headers)
+
+        let output = response.flatMap({ response -> Single<OutputDTO> in
+            do {
+                let output = try OutputDTO.decode(from: response, using: usableDecoder)
+                return Single.just(output)
+            } catch let error {
+                return Single.error(DecodingError(error: error, response: response))
+            }
+        })
+
+        return output
+    }
+
 }
