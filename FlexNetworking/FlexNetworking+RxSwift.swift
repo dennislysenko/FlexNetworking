@@ -67,7 +67,7 @@ extension FlexNetworking.Rx {
             do {
                 let startingRequestParameters: RequestParameters = (session, path, method, body, headers)
                 let finalRequestParameters = try self.flex.preRequestHooks.reduce(startingRequestParameters) { (requestParameters, hook) -> RequestParameters in
-                    return try hook.execute(on: startingRequestParameters)
+                    return try hook.execute(on: requestParameters)
                 }
                 observer(.success(finalRequestParameters))
             } catch let error {
@@ -117,9 +117,27 @@ extension FlexNetworking.Rx {
             .subscribeOn(ConcurrentDispatchQueueScheduler(queue: DispatchQueue.global(qos: .default)))
     }
 
-    public struct DecodingError: Error {
+    public struct DecodingError: Error, CustomNSError {
+        public let outputDTOTypeName: String
         public let error: Error
         public let response: Response
+
+        public static var errorDomain: String {
+            return "DecodingError"
+        }
+
+        public var errorCode: Int {
+            return 1
+        }
+
+        public var errorUserInfo: [String : Any] {
+            return [
+                "outputDTOTypeName": outputDTOTypeName,
+                "underlyingError": String(describing: error),
+                "underlyingErrorDescription": error.localizedDescription,
+                "response": String(describing: response)
+            ]
+        }
     }
 
     ///
@@ -138,7 +156,7 @@ extension FlexNetworking.Rx {
         decoder: JSONDecoder? = nil,
         path: String,
         method: String,
-        body: InputDTO,
+        codableBody body: InputDTO,
         headers: [String: String] = [:]
     ) -> Single<OutputDTO> {
 
@@ -163,7 +181,7 @@ extension FlexNetworking.Rx {
                 let output = try OutputDTO.decode(from: response, using: usableDecoder)
                 return Single.just(output)
             } catch let error {
-                return Single.error(DecodingError(error: error, response: response))
+                return Single.error(DecodingError(outputDTOTypeName: String(describing: OutputDTO.self), error: error, response: response))
             }
         })
 
@@ -195,7 +213,7 @@ extension FlexNetworking.Rx {
                 let output = try OutputDTO.decode(from: response, using: usableDecoder)
                 return Single.just(output)
             } catch let error {
-                return Single.error(DecodingError(error: error, response: response))
+                return Single.error(DecodingError(outputDTOTypeName: String(describing: OutputDTO.self), error: error, response: response))
             }
         })
 

@@ -22,7 +22,7 @@ public enum Result<T>: CustomStringConvertible {
 
 public typealias ResultBlock = (Result<Response>) -> ()
 
-public enum RequestError: Error {
+public enum RequestError: Error, CustomNSError {
     case noInternet(Error)
     case miscURLSessionError(Error)
     case invalidURL(message: String)
@@ -45,6 +45,18 @@ public enum RequestError: Error {
         case .unknownError(let message):
             return "Unknown error. Message: \(message)"
         }
+    }
+
+    public static var errorDomain: String {
+        return "RequestError"
+    }
+
+    public var errorCode: Int {
+        return 1
+    }
+
+    public var errorUserInfo: [String : Any] {
+        return ["description": self.localizedDescription]
     }
 }
 
