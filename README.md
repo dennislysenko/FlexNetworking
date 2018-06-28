@@ -1,32 +1,63 @@
+# Installation
+
+## Cocoapods
+
+```ruby
+pod 'FlexNetworking', '~> 1.0'
+
+# optionally:
+
+pod 'FlexNetworking/SwiftyJSON', '~> 1.0' 
+# automatically parses JSON responses using SwiftyJSON
+
+pod 'FlexNetworking/RxSwift', '~> 1.0'
+# provides properly disposable Single operations for making requests
+```
+
 # What is FlexNetworking?
 
-FlexNetworking is a modern Rx and Codable-optimized networking library that is built specifically for apps that make calls to one or more APIs. We, the developers, have been using it in production since the very first version for networking-heavy client apps and constantly evolving it to fit what we do better. So far, it has been used in three social networking apps and two team-based content creation apps.
+FlexNetworking is a modern, convenient, Codable-optimized, Rx-enabled networking library that is built specifically for apps that make safe calls to APIs while avoiding boilerplate. We, the developers, have been using it in production since the very first version for networking-heavy client apps and constantly evolving it to fit what we do better. So far, it has been used in three social networking apps and two team-based content creation apps.
 
 Let's keep this short and check out some usage first.
 
 # Usage
 
 ```swift
-// asynchronous usage with a defined API endpoint
-AppNetworking.runRequestAsync(path: "/conversations/\(user.id)/messages", method: "POST", body: ["text": "hello"]) { result in 
+// asynchronous usage
+AppNetworking.runRequestAsync(path: "/conversations/\(conversation.id)/messages", method: "POST", body: ["text": text]) { result in 
+    // note that you did not have to pass your api endpoint or auth info to your networking instance 
+    // because you have configured this FlexNetworking instance for your API.
+
     switch result {
-    case .success(let response):
-        if response.status == 200, let json = response.asJSON {
-            // use response.asJSON or response.asString, or response.rawData if you want to decode it manually
-            let id = json["id"].string
-        } else {
-            // probably an internal server error, bad request error or permission/auth error -- handle appropriately
+    case .success(let response) where response.status == 200:
+        // use response.asJSON, response.asString, or response.rawData
+        if let id = response.asJSON?["id"].string, let text = response.asJSON?["text"].string {
+            self.messages.append(Message(id: id, text: text))
         }
+    case .success(let response):
+        // probably internal server error, bad request error or permission/auth error
+
+        print("bad response: \(response)")
+        // ^ this logs response status, body, and request details to help diagnose
     case .failure(let error):
-        // `error`, when coalesced to a string, will contain enough information to diagnose the exact error in the majority of cases.
-        // there is a special case of error, RequestError.noInternet(_) which you can catch if you are specifically interested in capturing cases where 
+        switch error {
+        case RequestError.noInternet:
+            SVProgressHUD.showError(withStatus: "No internet. Please check your connection and try again")
+
+        case RequestError.cancelledByCaller:
+            break // do not show error if cancelled by user
+
+        default:
+            print("error making request: \(error)")
+            SVProgressHUD.showError(withStatus: "Error. Please try again later")
+        }
     }
 }
 
 // synchronous usage
 let response = try AppNetworking.runRequest(path: "/users/\(user.id)/profile-picture", method: "GET", body: nil)
 if response.status == 200, let data = response.rawData {
-    profileImageView.image = UIImage(data: data) // this is a really bad example, please use SDWebImage or something for this
+    profileImageView.image = UIImage(data: data) // this is a really bad example, please use SDWebImage for images...
 } else {
     print("Bad response status getting user's profile picture; details in \(response)")
 }
@@ -39,27 +70,29 @@ struct SearchFilters: Codable {
 
 let userDefinedFilters = SearchFilters(query: "programming", minimumScore: 1)
 
-FlexNetworking.rx.requestCodable(path: "/users/\(user.id)", method: "GET", codableBody: userDefinedFilters)
-    .subscribe(onSuccess: { (posts: [Post]) in 
+FlexNetworking.rx.requestCodable(path: "/users/\(user.id)/posts/search", method: "GET", codableBody: userDefinedFilters)
+    .subscribe(onSuccess: { [weak self] (posts: [Post]) in 
         // automatically called on main queue, but you can of course change this by calling observeOn(_:) with another scheduler
+        guard let `self` = self else { return }
         self.posts = posts
         self.collectionView.reloadData()
-    }, onError: (error) in {
+    }, onError: { (error) in
         Log.e("Error getting posts with search filters:", error)
-        // error will either be a detailed request error, a detailed decoding error containing the response that failed to decode, or an error from your custom hooks
         // SEE: section labeled "Benefit: Detailed Errors" below
-    }).addTo(viewModel.disposeBag)
+    }).disposed(by: viewModel.disposeBag)
 
 ```
 
-Essentially, you choose which way you want the result delivered (async, synchronous, or as an rx Single) and be on your merry way. These are the parameters that you can pass to the request methods:
-- `urlSession`: a `URLSession` to run the request on.
-- `path`: a `String` containing the URL of the page you want to request.
-- `method`: a `String` containing any HTTP method (GET, POST, PUT, PATCH, DELETE etc.)
-- `body`: for a querystring (GET) request, this should be a `Dictionary` instance. for any other request, this can be a `Dictionary`, `RawBody(data:contentType:)` (from the `FlexNetworking` module), or `JSON` (if `FlexNetworking/SwiftyJSON subpod is installed`).
-- `headers`: a string-to-string dictionary of request headers.
+These are the parameters you can pass to request methods:
+- `session`: a `URLSession` to run the request on
+- `path`: the URL of the page you want to request
+- `method`: any HTTP method (GET, POST, PUT, PATCH, DELETE...)
+- `body`: 
+  - for a querystring (GET) request: a `Dictionary` instance
+  - for any other request: a `Dictionary`, `RawBody(data:contentType:)`, or `JSON` (if `FlexNetworking/SwiftyJSON subpod is installed`).
+- `headers`: dictionary of request headers
 
-You can either call everything like `FlexNetworking().runRequest` (previous static methods are deprecated and have been removed), or create an instance like:
+You can either call everything like `FlexNetworking().runRequest` or create an instance like:
 
 ```
 let APINetworking = FlexNetworking(...)
@@ -69,13 +102,16 @@ and call things with `APINetworking.runRequest(...)`. The latter option is much 
 
 # Why??
 
-Unlike other libraries which are either inflexible or not swifty enough (by our standards - looking at you Alamofire with your all-arg-optional objective-C style callbacks where you aren't guaranteed to have data OR an error and no one has figured out a stylistically clean way to deal with this, except the core swift team, and it's called enums! 🙄), Flex allows you to run any type of network request, any way you want it, in the Swiftiest way possible. 
+The original motivation three or four years ago was simple. We hated boilerplate. We loved Swift. I disliked libraries that didn't use Swift effectively. 
+
+Unlike other libraries which were either inflexible or not "swifty" enough... *(looking at you, Alamofire, with your optional-arg, objective-C style callbacks, where you aren't technically guaranteed to have data OR an error, and everyone deals with this one of three different ways, often within the same project even though the Swift team made a fantastic, powerful enum implementation 🙄)*
+... Flex would allow you to run any type of network request, any way you want it, in the Swiftiest way possible: with an enum-backed `Result` monad for asynchronous calls, and a throwing non-optional return value for synchronous calls.
 
 Later, we found ourselves using a LOT of `Codable` and a LOT of `Rx` and decided to build them into this library as first class citizens, so we basically can't even fathom using any other library for our Rx-based and Codable-based apps now.
 
 Finally, the error handling is amazing and a lot better than other libs we've used in the past. We have specifically built the thrown errors and the `Response` structs so that it is easy to diagnose what exactly went wrong by just logging the error or the response, because we were pissed about opaque errors that didn't provide enough information to diagnose based on logs, leading to bugs being shelved and left unresolved ("no repro case"). Hours of troubleshooting can be avoided with 5 minutes of work on the implementation (that's literally how long adding the requestParameters to the response struct took me, and it has already saved me hours and tons of frustration).
 
-Logging an error will give you its specific category (including "noInternet" instead of `code == -1020` and "cancelledByUser" instead of `code == -999`) so you can handle certain ones specifically (e.g. queue an operation to retry if the internet connection cuts out) or just log them so troubleshooting is easier when issues eventually do crop up. 
+Logging an error will give you its specific category (including "noInternet" instead of `code == -1020` and "cancelledByCaller" instead of `code == -999`) so you can handle certain ones specifically (e.g. queue an operation to retry if the internet connection cuts out) or just log them so troubleshooting is easier when issues eventually do crop up. 
 
 Logging a response will tell you its status, body, and all original parameters that formed the URL request that was actually executed.
 
@@ -85,11 +121,11 @@ The basic process of making a request throws a closed set of errors (UNLESS you 
 
 These are members of the enum `RequestError` and fall into six categories:
 - `.noInternet(Error)`
-- `.miscURLSessionError(Error) // wraps an error directly from URLSession, except if the error carries the specific error code denoting no internet`
-- `.invalidURL(message: String) // message will include the invalid path that could not be used as a URL for a request`
-- `.emptyResponseError(Response) // includes all of the initial request parameters`
-- `.cancelledByCaller // thrown when the request is cancelled by the user.`
-- `.unknownError(message: String) // thrown in the rare case when Apple's URLSession returns a nil response and nil error in the handler. this should not happen in normal operation`
+- `.cancelledByCaller`
+- `.miscURLSessionError(Error)` (wraps an error directly from URLSession unless one of the two above)
+- `.invalidURL(message: String)` (will specify the invalid URL string)
+- `.emptyResponseError(Response)` (includes response status + request parameters)
+- `.unknownError(message: String)`
 
 `FlexNetworking+RxSwift` expands upon this by also introducing a `DecodingError` struct, which is used in `.rx.requestCodable`. If an error is encountered while decoding the output type you were expecting from the request, an instance of `DecodingError` will be cascaded down the observer chain. **Printing this instance will give you context about the request parameters, the response (including status), and the exact error that the decoder ran into while attempting to decode the output type.**
 
@@ -158,8 +194,9 @@ let defaultDecoder: JSONDecoder = {
 let AppNetworking = FlexNetworking(
     preRequestHooks: [
         BlockPreRequestHook { (requestParameters) in
-            // mutate path to allow us to use relative API paths and send authorization header with every request when present
-            let (urlSession, path, method, body, headers) = requestParameters
+            // mutate path to allow us to use relative API paths
+            // and send authorization header with every request when present
+            let (session, path, method, body, headers) = requestParameters
 
             var additionalHeaders = headers
 
@@ -167,17 +204,17 @@ let AppNetworking = FlexNetworking(
                 additionalHeaders["Authorization"] = "Bearer \(ActiveUser.token)"
             }
 
-            return (urlSession, Constants.apiEndpoint.appending(path), method, body, additionalHeaders)
+            return (session, Constants.apiEndpoint.appending(path), method, body, additionalHeaders)
         }
     ],
     postRequestHooks: [
         BlockPostRequestHook { (response, originalRequestParameters) -> PostRequestHookResult in
-            let (urlSession, path, _, _, _) = originalRequestParameters
+            let (session, path, _, _, _) = originalRequestParameters
 
             if response.status == 401, let refreshToken = ActiveUser.refreshToken {
                 // do token refresh if we got a 401
                 let loginRequestParameters: RequestParameters = (
-                    urlSession: urlSession,
+                    session: session,
                     path: Constants.apiEndpoint.appending("/token-refresh"),
                     method: "POST",
                     body: ["refreshToken": refreshToken],
@@ -186,7 +223,6 @@ let AppNetworking = FlexNetworking(
 
                 return .makeNewRequest(loginRequestParameters)
             } else {
-                // or abort the post-request chain if we got a successful response - no need to refresh the token
                 return .completed
             }
         },
@@ -204,17 +240,18 @@ let AppNetworking = FlexNetworking(
                 var headers = originalRequestParameters.headers
                 headers["Authorization"] = "Bearer \(token)"
 
-                // copy the original request from before the token refresh, but add the new token to the headers
+                // copy the original request from before the token refresh, 
+                // but add the new token to the headers
                 var retryRequestParameters = originalRequestParameters
                 retryRequestParameters.headers = headers
 
                 return .makeNewRequest(retryRequestParameters)
-            } catch let e {
-                Log.e(e)
-                
-                // TODO kick the user back to a login screen
+            } catch let error {
+                Log.e(error)
 
-                throw e // this will raise a request error at the call site.
+                // TODO: kick the user back to a login screen
+
+                throw error // rethrow to caller
             }
         }
     ],
@@ -230,3 +267,8 @@ let AppNetworking = FlexNetworking(
 - Codable request/response integration for non-Rx
 - MULTIPART!!!
 - **Whatever you think is important: please leave an issue!**
+
+# Authors
+
+- [Dennis Lysenko](https://github.com/dennislysenko)
+- [Andriy Katkov](https://github.com/akatkov7/Peasants-Medieval-Siege)

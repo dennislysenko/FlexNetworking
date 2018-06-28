@@ -13,6 +13,11 @@
 		9544D1341F707EE400F0D5E3 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9544D1321F707EE400F0D5E3 /* Main.storyboard */; };
 		9544D1361F707EE400F0D5E3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9544D1351F707EE400F0D5E3 /* Assets.xcassets */; };
 		9544D1391F707EE400F0D5E3 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9544D1371F707EE400F0D5E3 /* LaunchScreen.storyboard */; };
+		95CBC92F20E471B80016A16B /* RequestBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95CBC92E20E471B80016A16B /* RequestBody.swift */; };
+		95CBC93120E471C90016A16B /* RequestHooks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95CBC93020E471C90016A16B /* RequestHooks.swift */; };
+		95CBC93320E472240016A16B /* RequestError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95CBC93220E472230016A16B /* RequestError.swift */; };
+		95CBC93520E472350016A16B /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95CBC93420E472350016A16B /* Result.swift */; };
+		95CBC93720E472430016A16B /* Response.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95CBC93620E472430016A16B /* Response.swift */; };
 		95DE40C820AD2E6500F9D32D /* FlexNetworking+SwiftyJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95DE40C720AD2E6500F9D32D /* FlexNetworking+SwiftyJSON.swift */; };
 		95DE40CA20AD2E6E00F9D32D /* FlexNetworking+RxSwift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95DE40C920AD2E6E00F9D32D /* FlexNetworking+RxSwift.swift */; };
 		95DE40CC20AD2E7600F9D32D /* FlexNetworking+Codable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95DE40CB20AD2E7600F9D32D /* FlexNetworking+Codable.swift */; };
@@ -36,6 +41,11 @@
 		9544D1381F707EE400F0D5E3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		9544D13A1F707EE400F0D5E3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9544D1421F707FC200F0D5E3 /* Pods_FlexNetworking.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Pods_FlexNetworking.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		95CBC92E20E471B80016A16B /* RequestBody.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestBody.swift; sourceTree = "<group>"; };
+		95CBC93020E471C90016A16B /* RequestHooks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestHooks.swift; sourceTree = "<group>"; };
+		95CBC93220E472230016A16B /* RequestError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestError.swift; sourceTree = "<group>"; };
+		95CBC93420E472350016A16B /* Result.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Result.swift; sourceTree = "<group>"; };
+		95CBC93620E472430016A16B /* Response.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Response.swift; sourceTree = "<group>"; };
 		95DE40C520AD0F9800F9D32D /* FlexNetworking.podspec.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = FlexNetworking.podspec.json; sourceTree = "<group>"; };
 		95DE40C720AD2E6500F9D32D /* FlexNetworking+SwiftyJSON.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FlexNetworking+SwiftyJSON.swift"; sourceTree = "<group>"; };
 		95DE40C920AD2E6E00F9D32D /* FlexNetworking+RxSwift.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FlexNetworking+RxSwift.swift"; sourceTree = "<group>"; };
@@ -136,6 +146,11 @@
 				95DE40C720AD2E6500F9D32D /* FlexNetworking+SwiftyJSON.swift */,
 				95DE40C920AD2E6E00F9D32D /* FlexNetworking+RxSwift.swift */,
 				95DE40CB20AD2E7600F9D32D /* FlexNetworking+Codable.swift */,
+				95CBC92E20E471B80016A16B /* RequestBody.swift */,
+				95CBC93020E471C90016A16B /* RequestHooks.swift */,
+				95CBC93220E472230016A16B /* RequestError.swift */,
+				95CBC93420E472350016A16B /* Result.swift */,
+				95CBC93620E472430016A16B /* Response.swift */,
 			);
 			path = FlexNetworking;
 			sourceTree = "<group>";
@@ -329,9 +344,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				95CBC93320E472240016A16B /* RequestError.swift in Sources */,
+				95CBC93120E471C90016A16B /* RequestHooks.swift in Sources */,
 				95DE40CA20AD2E6E00F9D32D /* FlexNetworking+RxSwift.swift in Sources */,
 				95DE40C820AD2E6500F9D32D /* FlexNetworking+SwiftyJSON.swift in Sources */,
+				95CBC93720E472430016A16B /* Response.swift in Sources */,
 				95F9AB321D9AFA9200AACD19 /* FlexNetworking.swift in Sources */,
+				95CBC92F20E471B80016A16B /* RequestBody.swift in Sources */,
+				95CBC93520E472350016A16B /* Result.swift in Sources */,
 				95DE40CC20AD2E7600F9D32D /* FlexNetworking+Codable.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
