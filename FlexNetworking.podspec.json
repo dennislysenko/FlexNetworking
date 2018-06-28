@@ -3,7 +3,7 @@
   "default_subspecs": [
     "Core"
   ],
-  "description": "Unlike other libraries which are either inflexible or not swifty enough (by our standards), Flex allows you to run any type of network request, any way you want it, in the Swiftiest way possible. Examples will be added to README later. I'm just putting this up so I can use it in a project because I've tried the networking alternatives and they all have glaring issues for my use case. Reach out to Dennis via email (dennis.s.lysenko AT gmail.com) if you have any question about how to do something using this lib and I'll add it to the README.",
+  "description": "FlexNetworking is a modern, convenient, Codable-optimized, Rx-enabled networking library that is built specifically for apps that make safe calls to APIs while avoiding boilerplate. We, the developers, have been using it in production since the very first version for networking-heavy client apps and constantly evolving it to fit what we do better. So far, it has been used in three social networking apps and two team-based content creation apps.",
   "homepage": "https://github.com/dennislysenko/FlexNetworking",
   "license": {
     "text": "Copyright 2018 Dennis Lysenko",
@@ -15,11 +15,11 @@
   },
   "source": {
     "git": "https://github.com/dennislysenko/FlexNetworking.git",
-    "tag": "v0.3"
+    "tag": "v1.0"
   },
   "swift_version": "4.1",
-  "summary": "A common sense sync-or-async networking lib with an ability to get results flexibly, and bindings to SwiftyJSON, and RxSwift.",
-  "version": "0.3",
+  "summary": "FlexNetworking is a modern, convenient, Codable-optimized, Rx-enabled networking library built to make safe requests and avoid boilerplate.",
+  "version": "1.0",
   "subspecs": [
     {
       "dependencies": {
@@ -27,7 +27,12 @@
       "name": "Core",
       "source_files": [
         "FlexNetworking/FlexNetworking.swift",
-        "FlexNetworking/FlexNetworking+Codable.swift"
+        "FlexNetworking/FlexNetworking+Codable.swift",
+        "FlexNetworking/RequestBody.swift",
+        "FlexNetworking/RequestHooks.swift",
+        "FlexNetworking/RequestError.swift",
+        "FlexNetworking/Response.swift",
+        "FlexNetworking/Result.swift"
       ],
       "user_target_xcconfig": {
         "HEADER_SEARCH_PATHS": "$(inherited) ${PODS_ROOT}/Firebase/CoreOnly/Sources"
