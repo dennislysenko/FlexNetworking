@@ -77,7 +77,7 @@ public class FlexNetworking {
                 requestParameters: originalRequestParameters
             )
         } else if let requestError = requestError {
-            if (requestError as NSError).code == -1020 {
+            if (requestError as NSError).code == -1020 || (requestError as NSError).code == -1009 {
                 // No Internet code
                 throw RequestError.noInternet(requestError)
             } else if (requestError as NSError).code == -999 {
