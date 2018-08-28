@@ -153,16 +153,18 @@ extension FlexNetworking.Rx {
             return self.runRequest(session: session, path: path, method: method, body: body, headers: headers)
         })
 
-        let output = response.flatMap({ response -> Single<OutputDTO> in
-            do {
-                let output = try OutputDTO.decode(from: response, using: usableDecoder)
-                return Single.just(output)
-            } catch let error {
-                return Single.error(DecodingError(outputDTOTypeName: String(describing: OutputDTO.self), error: error, response: response))
-            }
-        })
+        let output = response
+            .observeOn(ConcurrentDispatchQueueScheduler(queue: DispatchQueue.global(qos: .default)))
+            .flatMap({ response -> Single<OutputDTO> in
+                do {
+                    let output = try OutputDTO.decode(from: response, using: usableDecoder)
+                    return Single.just(output)
+                } catch let error {
+                    return Single.error(DecodingError(outputDTOTypeName: String(describing: OutputDTO.self), error: error, response: response))
+                }
+            })
 
-        return output
+        return output.observeOn(MainScheduler.instance)
     }
 
     ///
@@ -185,16 +187,18 @@ extension FlexNetworking.Rx {
 
         let response = self.runRequest(session: session, path: path, method: method, body: body, headers: headers)
 
-        let output = response.flatMap({ response -> Single<OutputDTO> in
-            do {
-                let output = try OutputDTO.decode(from: response, using: usableDecoder)
-                return Single.just(output)
-            } catch let error {
-                return Single.error(DecodingError(outputDTOTypeName: String(describing: OutputDTO.self), error: error, response: response))
-            }
-        })
+        let output = response
+            .observeOn(ConcurrentDispatchQueueScheduler(queue: DispatchQueue.global(qos: .default)))
+            .flatMap({ response -> Single<OutputDTO> in
+                do {
+                    let output = try OutputDTO.decode(from: response, using: usableDecoder)
+                    return Single.just(output)
+                } catch let error {
+                    return Single.error(DecodingError(outputDTOTypeName: String(describing: OutputDTO.self), error: error, response: response))
+                }
+            })
 
-        return output
+        return output.observeOn(MainScheduler.instance)
     }
 
 }
