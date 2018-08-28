@@ -7,7 +7,7 @@
   "homepage": "https://github.com/dennislysenko/FlexNetworking",
   "license": {
     "text": "Copyright 2018 Dennis Lysenko",
-    "type": "Copyright"
+    "type": "MIT"
   },
   "name": "FlexNetworking",
   "platforms": {
