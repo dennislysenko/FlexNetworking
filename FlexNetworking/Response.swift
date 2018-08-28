@@ -19,7 +19,8 @@ public struct Response: CustomStringConvertible {
     public var description: String {
         let bodyDescription: String
         if let string = self.asString {
-            bodyDescription = string
+            let trimmedString = String(string.prefix(4096))
+            bodyDescription = "\(trimmedString)\(string.count > 4096 ? "..." : "")"
         } else if let data = self.rawData {
             bodyDescription = "\(data.count) bytes"
         } else {
