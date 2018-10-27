@@ -16,4 +16,4 @@ FOUNDATION_EXPORT const unsigned char FlexNetworkingVersionString[];
 
 // In this header, you should import all the public headers of your framework using statements like #import <FlexNetworking/PublicHeader.h>
 
-const long long SwiftNSURLResponseUnknownLength = NSURLResponseUnknownLength;
+FOUNDATION_EXPORT const long long SwiftNSURLResponseUnknownLength = NSURLResponseUnknownLength;
