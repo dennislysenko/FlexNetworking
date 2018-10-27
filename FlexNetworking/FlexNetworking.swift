@@ -9,14 +9,24 @@ import Foundation
 /// All the context that goes into making a request. Useful for troubleshooting, as this is included with all responses.
 public typealias RequestParameters = (session: URLSession, path: String, method: String, body: RequestBody?, headers: [String: String])
 
-public class FlexNetworking {
+public class FlexNetworking: NSObject {
     public let preRequestHooks: [PreRequestHook]
     public let postRequestHooks: [PostRequestHook]
 
     public let defaultEncoder: JSONEncoder
     public let defaultDecoder: JSONDecoder
 
-    static let `default` = FlexNetworking()
+    private let dispatchQueue: DispatchQueue
+    private let operationQueue: OperationQueue
+    internal lazy var session = URLSession(configuration: .default, delegate: self, delegateQueue: self.operationQueue)
+
+    internal var requestParamatersMap: [String: RequestParameters] = [:]
+    private var dataSoFar: [String: Data] = [:]
+    private var expectedDataLength: [String: Int64] = [:]
+    internal var responseObservers: [String: (Response?, Error?) -> Void] = [:]
+    internal var progressObservers: [String: (Float) -> Void] = [:]
+
+    public static let `default` = FlexNetworking()
 
     public init(preRequestHooks: [PreRequestHook] = [],
         postRequestHooks: [PostRequestHook] = [],
@@ -27,6 +37,12 @@ public class FlexNetworking {
         self.postRequestHooks = postRequestHooks
         self.defaultEncoder = defaultEncoder
         self.defaultDecoder = defaultDecoder
+
+        self.dispatchQueue = DispatchQueue(label: "\(type(of: self)).dispatchQueue)")
+        self.operationQueue = OperationQueue()
+        self.operationQueue.underlyingQueue = self.dispatchQueue
+
+        super.init()
     }
 
     // MARK: - Request Methods
@@ -34,7 +50,7 @@ public class FlexNetworking {
     ///
     /// Creates a URLSessionTask for a single HTTP request with request parameters specified in FlexNetworking notation.
     ///
-    public func getTaskForRequest(session: URLSession, path: String, method: String, body: RequestBody?, headers: [String: String] = [:], completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) throws -> URLSessionTask {
+    public func getTaskForRequest(session: URLSession, path: String, method: String, body: RequestBody?, headers: [String: String] = [:], completionHandler: ((Data?, URLResponse?, Error?) -> Void)?) throws -> URLSessionTask {
         guard let url = URL(string: path) else {
             throw RequestError.invalidURL(message: "Invalid URL \(path)")
         }
@@ -62,7 +78,11 @@ public class FlexNetworking {
             request.setValue(value, forHTTPHeaderField: header)
         }
 
-        return session.dataTask(with: request, completionHandler: completionHandler)
+        if let completionHandler = completionHandler {
+            return session.dataTask(with: request, completionHandler: completionHandler)
+        } else {
+            return session.dataTask(with: request)
+        }
     }
 
     ///
@@ -77,12 +97,14 @@ public class FlexNetworking {
                 requestParameters: originalRequestParameters
             )
         } else if let requestError = requestError {
-            if (requestError as NSError).code == -1020 || (requestError as NSError).code == -1009 {
+            if (requestError as NSError).code == NSURLErrorDataNotAllowed || (requestError as NSError).code == NSURLErrorNotConnectedToInternet {
                 // No Internet code
                 throw RequestError.noInternet(requestError)
-            } else if (requestError as NSError).code == -999 {
+            } else if (requestError as NSError).code == NSURLErrorCancelled {
                 // Cancelled NSError code
                 throw RequestError.cancelledByCaller
+            } else if (requestError as NSError).code == NSURLErrorTimedOut {
+                throw RequestError.requestTimedOut
             } else {
                 throw RequestError.miscURLSessionError(requestError)
             }
@@ -267,4 +289,103 @@ public class FlexNetworking {
     }
 
     internal lazy var _rx = Rx(flex: self)
+}
+
+extension FlexNetworking: URLSessionDataDelegate, URLSessionDownloadDelegate {
+
+    public func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didWriteData bytesWritten: Int64, totalBytesWritten: Int64, totalBytesExpectedToWrite: Int64) {
+        guard let taskID = downloadTask.taskDescription else {
+            return
+        }
+
+        self.progressObservers[taskID]?(Float(totalBytesWritten) / Float(totalBytesExpectedToWrite))
+    }
+
+    public func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, didReceive response: URLResponse, completionHandler: @escaping (URLSession.ResponseDisposition) -> Void) {
+        if let taskID = dataTask.taskDescription, response.expectedContentLength != SwiftNSURLResponseUnknownLength {
+            self.expectedDataLength[taskID] = response.expectedContentLength
+        }
+        completionHandler(.allow)
+    }
+
+    public func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, didReceive data: Data) {
+        guard let taskID = dataTask.taskDescription else {
+            return
+        }
+
+        if self.dataSoFar[taskID] == nil {
+            self.dataSoFar[taskID] = Data()
+        }
+        self.dataSoFar[taskID]?.append(data)
+        let progress: Float
+        if let expectedLength = self.expectedDataLength[taskID] {
+            progress = Float(self.dataSoFar[taskID]?.count ?? 0) / Float(expectedLength)
+        } else {
+            progress = -1
+        }
+
+        self.progressObservers[taskID]?(progress)
+    }
+
+    public func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL) {
+        guard let taskID = downloadTask.taskDescription else {
+            return
+        }
+
+        guard let originalRequestParameters = self.requestParamatersMap[taskID] else {
+            assert(false, "originalRequestParameters are missing for \(taskID)")
+            return
+        }
+
+        do {
+            let response = try self.parseNetworkResponse(
+                originalRequestParameters: originalRequestParameters,
+                responseData: try Data(contentsOf: location),
+                httpURLResponse: downloadTask.response as? HTTPURLResponse,
+                requestError: nil
+            )
+            self.responseObservers[taskID]?(response, nil)
+        } catch let error {
+            self.responseObservers[taskID]?(nil, error)
+        }
+        self.cleanup(taskID: taskID)
+    }
+
+    public func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
+        guard let taskID = task.taskDescription else {
+            return
+        }
+
+        guard let originalRequestParameters = self.requestParamatersMap[taskID] else {
+            assert(false, "originalRequestParameters are missing for \(taskID)")
+            return
+        }
+
+        guard error != nil || !(task is URLSessionDownloadTask) else {
+            // completion will be handled in didFinishDownloadTo
+            return
+        }
+
+        do {
+            let response = try self.parseNetworkResponse(
+                originalRequestParameters: originalRequestParameters,
+                responseData: self.dataSoFar[taskID],
+                httpURLResponse: task.response as? HTTPURLResponse,
+                requestError: error
+            )
+            self.responseObservers[taskID]?(response, nil)
+        } catch let error {
+            self.responseObservers[taskID]?(nil, error)
+        }
+        self.cleanup(taskID: taskID)
+    }
+
+    private func cleanup(taskID: String) {
+        self.requestParamatersMap[taskID] = nil
+        self.dataSoFar[taskID] = nil
+        self.expectedDataLength[taskID] = nil
+        self.responseObservers[taskID] = nil
+        self.progressObservers[taskID] = nil
+    }
+
 }

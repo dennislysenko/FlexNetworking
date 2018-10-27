@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		1D1CBE0EF99A413B7395F1F6 /* Pods_FlexNetworking.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A0A7AD305F2943AD02B7DA30 /* Pods_FlexNetworking.framework */; };
+		31F8FF252184FE9C00162133 /* FlexNetworking.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 95F9AB261D9AFA8600AACD19 /* FlexNetworking.framework */; };
+		31F8FF262184FE9C00162133 /* FlexNetworking.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 95F9AB261D9AFA8600AACD19 /* FlexNetworking.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		9544D12F1F707EE400F0D5E3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9544D12E1F707EE400F0D5E3 /* AppDelegate.swift */; };
 		9544D1311F707EE400F0D5E3 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9544D1301F707EE400F0D5E3 /* ViewController.swift */; };
 		9544D1341F707EE400F0D5E3 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9544D1321F707EE400F0D5E3 /* Main.storyboard */; };
@@ -22,12 +24,35 @@
 		95DE40CA20AD2E6E00F9D32D /* FlexNetworking+RxSwift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95DE40C920AD2E6E00F9D32D /* FlexNetworking+RxSwift.swift */; };
 		95DE40CC20AD2E7600F9D32D /* FlexNetworking+Codable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95DE40CB20AD2E7600F9D32D /* FlexNetworking+Codable.swift */; };
 		95F6509A1F708C24003ED2C3 /* Pods_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 94E04039F2702A87AEB9D1AB /* Pods_Example.framework */; };
-		95F6509B1F708F64003ED2C3 /* FlexNetworking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95F9AB311D9AFA9200AACD19 /* FlexNetworking.swift */; };
 		95F9AB2B1D9AFA8600AACD19 /* FlexNetworking.h in Headers */ = {isa = PBXBuildFile; fileRef = 95F9AB291D9AFA8600AACD19 /* FlexNetworking.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		95F9AB321D9AFA9200AACD19 /* FlexNetworking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95F9AB311D9AFA9200AACD19 /* FlexNetworking.swift */; };
 		95F9AB361D9AFDDC00AACD19 /* Podfile in Resources */ = {isa = PBXBuildFile; fileRef = 95F9AB341D9AFDDC00AACD19 /* Podfile */; };
 		A18A571B49713B50635124A7 /* Pods_FlexNetworking.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9544D1421F707FC200F0D5E3 /* Pods_FlexNetworking.framework */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		31F8FF272184FE9C00162133 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 95F9AB1D1D9AFA8600AACD19 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 95F9AB251D9AFA8600AACD19;
+			remoteInfo = FlexNetworking;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		31F8FF292184FE9C00162133 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				31F8FF262184FE9C00162133 /* FlexNetworking.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		1B9A2D438841DEB0C238F6E7 /* Pods-Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Example.release.xcconfig"; path = "Pods/Target Support Files/Pods-Example/Pods-Example.release.xcconfig"; sourceTree = "<group>"; };
@@ -66,6 +91,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				95F6509A1F708C24003ED2C3 /* Pods_Example.framework in Frameworks */,
+				31F8FF252184FE9C00162133 /* FlexNetworking.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -178,10 +204,12 @@
 				9544D1291F707EE400F0D5E3 /* Frameworks */,
 				9544D12A1F707EE400F0D5E3 /* Resources */,
 				6E43814380A7FC259F64BA0E /* [CP] Embed Pods Frameworks */,
+				31F8FF292184FE9C00162133 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				31F8FF282184FE9C00162133 /* PBXTargetDependency */,
 			);
 			name = Example;
 			productName = Example;
@@ -336,7 +364,6 @@
 			files = (
 				9544D1311F707EE400F0D5E3 /* ViewController.swift in Sources */,
 				9544D12F1F707EE400F0D5E3 /* AppDelegate.swift in Sources */,
-				95F6509B1F708F64003ED2C3 /* FlexNetworking.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -357,6 +384,14 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		31F8FF282184FE9C00162133 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 95F9AB251D9AFA8600AACD19 /* FlexNetworking */;
+			targetProxy = 31F8FF272184FE9C00162133 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		9544D1321F707EE400F0D5E3 /* Main.storyboard */ = {
@@ -382,6 +417,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = A7206651C76E3C3CF1062E76 /* Pods-Example.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -404,6 +440,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 1B9A2D438841DEB0C238F6E7 /* Pods-Example.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
