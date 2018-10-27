@@ -69,7 +69,7 @@ extension FlexNetworking.Rx {
                 observer(.error(error))
                 return Disposables.create()
             }
-        })
+        }).subscribeOn(ConcurrentDispatchQueueScheduler(queue: self.flex.dispatchQueue))
     }
 
     ///
