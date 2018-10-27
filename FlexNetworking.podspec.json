@@ -27,6 +27,7 @@
       },
       "name": "Core",
       "source_files": [
+        "FlexNetworking/FlexNetworking.h",
         "FlexNetworking/FlexNetworking.swift",
         "FlexNetworking/FlexNetworking+Codable.swift",
         "FlexNetworking/RequestBody.swift",
