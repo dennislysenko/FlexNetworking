@@ -14,6 +14,7 @@ public enum RequestError: Error, CustomNSError {
     case invalidURL(message: String)
     case emptyResponseError(Response)
     case cancelledByCaller
+    case requestTimedOut
     case unknownError(message: String)
 
     public var localizedDescription: String {
@@ -28,6 +29,8 @@ public enum RequestError: Error, CustomNSError {
             return "Response had no data; status was \(response.status)"
         case .cancelledByCaller:
             return "Request was cancelled by the caller"
+        case .requestTimedOut:
+            return "Request timed out"
         case .unknownError(let message):
             return "Unknown error. Message: \(message)"
         }
