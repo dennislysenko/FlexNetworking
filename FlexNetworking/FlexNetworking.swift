@@ -16,7 +16,7 @@ public class FlexNetworking: NSObject {
     public let defaultEncoder: JSONEncoder
     public let defaultDecoder: JSONDecoder
 
-    private let dispatchQueue: DispatchQueue
+    internal let dispatchQueue: DispatchQueue
     private let operationQueue: OperationQueue
     internal lazy var session = URLSession(configuration: .default, delegate: self, delegateQueue: self.operationQueue)
 
