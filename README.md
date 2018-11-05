@@ -84,7 +84,6 @@ FlexNetworking.rx.requestCodable(path: "/users/\(user.id)/posts/search", method:
 ```
 
 These are the parameters you can pass to request methods:
-- `session`: a `URLSession` to run the request on
 - `path`: the URL of the page you want to request
 - `method`: any HTTP method (GET, POST, PUT, PATCH, DELETE...)
 - `body`: 
