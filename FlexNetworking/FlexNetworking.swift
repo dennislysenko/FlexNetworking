@@ -6,6 +6,8 @@
 
 import Foundation
 
+private let SwiftNSURLResponseUnknownLength: Int64 = -1
+
 /// All the context that goes into making a request. Useful for troubleshooting, as this is included with all responses.
 public typealias RequestParameters = (session: URLSession, path: String, method: String, body: RequestBody?, headers: [String: String])
 
