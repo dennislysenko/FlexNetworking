@@ -7,6 +7,7 @@
 //
 
 import XCTest
+import OHHTTPStubs
 @testable import FlexNetworking
 
 class FlexNetworkingRxTests: XCTestCase {
@@ -17,6 +18,7 @@ class FlexNetworkingRxTests: XCTestCase {
 
     override func tearDown() {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
+        OHHTTPStubs.removeAllStubs()
     }
 
     let sampleURL = "http://example.org/"
