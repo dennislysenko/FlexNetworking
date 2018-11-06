@@ -7,9 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		006C8F704EA297CC0F108931 /* Pods_FlexNetworking.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9544D1421F707FC200F0D5E3 /* Pods_FlexNetworking.framework */; };
 		1315B6A55416C307D8C54FD0 /* Pods_ExampleMac.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 35C25EFBA11994AE530686D3 /* Pods_ExampleMac.framework */; };
+		19EB0C3A6E33E911D0C11C06 /* Pods_FlexNetworkingTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49944C036CDA342B3623A8FB /* Pods_FlexNetworkingTests.framework */; };
 		1D1CBE0EF99A413B7395F1F6 /* Pods_FlexNetworking.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A0A7AD305F2943AD02B7DA30 /* Pods_FlexNetworking.framework */; };
 		30886F8683C4E87455DFBB06 /* Pods_FlexNetworkingMac.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 95FB978D2190D9F700F4FE9D /* Pods_FlexNetworkingMac.framework */; };
+		31C26030219139450070EA7A /* FlexNetworkingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31C2602F219139450070EA7A /* FlexNetworkingTests.swift */; };
+		31C26032219139450070EA7A /* FlexNetworking.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 95F9AB261D9AFA8600AACD19 /* FlexNetworking.framework */; };
+		31C26039219139630070EA7A /* FlexNetworkingRxTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31C26038219139630070EA7A /* FlexNetworkingRxTests.swift */; };
 		31F8FF252184FE9C00162133 /* FlexNetworking.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 95F9AB261D9AFA8600AACD19 /* FlexNetworking.framework */; };
 		31F8FF262184FE9C00162133 /* FlexNetworking.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 95F9AB261D9AFA8600AACD19 /* FlexNetworking.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		9514F2472190DBDE00CC73F4 /* FlexNetworking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95F9AB311D9AFA9200AACD19 /* FlexNetworking.swift */; };
@@ -43,10 +48,16 @@
 		95FB97AD2190DB6700F4FE9D /* FlexNetworkingMac.h in Headers */ = {isa = PBXBuildFile; fileRef = 95FB97AB2190DB6700F4FE9D /* FlexNetworkingMac.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		95FB97B02190DB6700F4FE9D /* FlexNetworkingMac.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 95FB97A92190DB6700F4FE9D /* FlexNetworkingMac.framework */; };
 		95FB97B12190DB6700F4FE9D /* FlexNetworkingMac.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 95FB97A92190DB6700F4FE9D /* FlexNetworkingMac.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		BD8953FF61A2C3D6FEC63850 /* Pods_FlexNetworking.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9544D1421F707FC200F0D5E3 /* Pods_FlexNetworking.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		31C26033219139450070EA7A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 95F9AB1D1D9AFA8600AACD19 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 95F9AB251D9AFA8600AACD19;
+			remoteInfo = FlexNetworking;
+		};
 		31F8FF272184FE9C00162133 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 95F9AB1D1D9AFA8600AACD19 /* Project object */;
@@ -92,7 +103,13 @@
 		1B9A2D438841DEB0C238F6E7 /* Pods-Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Example.release.xcconfig"; path = "Pods/Target Support Files/Pods-Example/Pods-Example.release.xcconfig"; sourceTree = "<group>"; };
 		214FF73A3991018DCF9E309A /* Pods-FlexNetworkingMac.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FlexNetworkingMac.release.xcconfig"; path = "Pods/Target Support Files/Pods-FlexNetworkingMac/Pods-FlexNetworkingMac.release.xcconfig"; sourceTree = "<group>"; };
 		2AB802AA0E8F0C45DE0C3E62 /* Pods-FlexNetworking.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FlexNetworking.release.xcconfig"; path = "Pods/Target Support Files/Pods-FlexNetworking/Pods-FlexNetworking.release.xcconfig"; sourceTree = "<group>"; };
+		31C2602D219139450070EA7A /* FlexNetworkingTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FlexNetworkingTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		31C2602F219139450070EA7A /* FlexNetworkingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlexNetworkingTests.swift; sourceTree = "<group>"; };
+		31C26031219139450070EA7A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		31C26038219139630070EA7A /* FlexNetworkingRxTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlexNetworkingRxTests.swift; sourceTree = "<group>"; };
 		35C25EFBA11994AE530686D3 /* Pods_ExampleMac.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ExampleMac.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		49944C036CDA342B3623A8FB /* Pods_FlexNetworkingTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FlexNetworkingTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		5957FD9BB11B51E16CB3E7C3 /* Pods-FlexNetworkingTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FlexNetworkingTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-FlexNetworkingTests/Pods-FlexNetworkingTests.release.xcconfig"; sourceTree = "<group>"; };
 		77A38ADD11CDD192990E33FA /* Pods-ExampleMac.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ExampleMac.release.xcconfig"; path = "Pods/Target Support Files/Pods-ExampleMac/Pods-ExampleMac.release.xcconfig"; sourceTree = "<group>"; };
 		8FC3540CBF8778CA863C9659 /* Pods-FlexNetworkingMac.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FlexNetworkingMac.debug.xcconfig"; path = "Pods/Target Support Files/Pods-FlexNetworkingMac/Pods-FlexNetworkingMac.debug.xcconfig"; sourceTree = "<group>"; };
 		94E04039F2702A87AEB9D1AB /* Pods_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -133,9 +150,19 @@
 		B482FFADD5B0AF3ABC4A7F30 /* Pods-ExampleMac.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ExampleMac.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ExampleMac/Pods-ExampleMac.debug.xcconfig"; sourceTree = "<group>"; };
 		DCD65FA178D85E8289E6F76D /* Pods-FlexNetworking.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FlexNetworking.debug.xcconfig"; path = "Pods/Target Support Files/Pods-FlexNetworking/Pods-FlexNetworking.debug.xcconfig"; sourceTree = "<group>"; };
 		ECAD5568B9FB722F545B8908 /* Pods_FlexNetworkingMac.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FlexNetworkingMac.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		F90806C708F5796DD5060E66 /* Pods-FlexNetworkingTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FlexNetworkingTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-FlexNetworkingTests/Pods-FlexNetworkingTests.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		31C2602A219139450070EA7A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				31C26032219139450070EA7A /* FlexNetworking.framework in Frameworks */,
+				19EB0C3A6E33E911D0C11C06 /* Pods_FlexNetworkingTests.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		9544D1291F707EE400F0D5E3 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -150,7 +177,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1D1CBE0EF99A413B7395F1F6 /* Pods_FlexNetworking.framework in Frameworks */,
-				BD8953FF61A2C3D6FEC63850 /* Pods_FlexNetworking.framework in Frameworks */,
+				006C8F704EA297CC0F108931 /* Pods_FlexNetworking.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -174,6 +201,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		31C2602E219139450070EA7A /* FlexNetworkingTests */ = {
+			isa = PBXGroup;
+			children = (
+				31C26038219139630070EA7A /* FlexNetworkingRxTests.swift */,
+				31C2602F219139450070EA7A /* FlexNetworkingTests.swift */,
+				31C26031219139450070EA7A /* Info.plist */,
+			);
+			path = FlexNetworkingTests;
+			sourceTree = "<group>";
+		};
 		3952257AE9F4B8378EE09B1D /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -185,6 +222,8 @@
 				214FF73A3991018DCF9E309A /* Pods-FlexNetworkingMac.release.xcconfig */,
 				B482FFADD5B0AF3ABC4A7F30 /* Pods-ExampleMac.debug.xcconfig */,
 				77A38ADD11CDD192990E33FA /* Pods-ExampleMac.release.xcconfig */,
+				F90806C708F5796DD5060E66 /* Pods-FlexNetworkingTests.debug.xcconfig */,
+				5957FD9BB11B51E16CB3E7C3 /* Pods-FlexNetworkingTests.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -198,6 +237,7 @@
 				94E04039F2702A87AEB9D1AB /* Pods_Example.framework */,
 				ECAD5568B9FB722F545B8908 /* Pods_FlexNetworkingMac.framework */,
 				35C25EFBA11994AE530686D3 /* Pods_ExampleMac.framework */,
+				49944C036CDA342B3623A8FB /* Pods_FlexNetworkingTests.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -224,6 +264,7 @@
 				9544D12D1F707EE400F0D5E3 /* Example */,
 				95FB97942190DA1900F4FE9D /* ExampleMac */,
 				95FB97AA2190DB6700F4FE9D /* FlexNetworkingMac */,
+				31C2602E219139450070EA7A /* FlexNetworkingTests */,
 				95F9AB271D9AFA8600AACD19 /* Products */,
 				3952257AE9F4B8378EE09B1D /* Pods */,
 				949EFAC3B369F43FAC8A63DD /* Frameworks */,
@@ -237,6 +278,7 @@
 				9544D12C1F707EE400F0D5E3 /* Example.app */,
 				95FB97932190DA1900F4FE9D /* ExampleMac.app */,
 				95FB97A92190DB6700F4FE9D /* FlexNetworkingMac.framework */,
+				31C2602D219139450070EA7A /* FlexNetworkingTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -302,6 +344,26 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
+		31C2602C219139450070EA7A /* FlexNetworkingTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 31C26037219139450070EA7A /* Build configuration list for PBXNativeTarget "FlexNetworkingTests" */;
+			buildPhases = (
+				A1865F61C71D913EBA5F8922 /* [CP] Check Pods Manifest.lock */,
+				31C26029219139450070EA7A /* Sources */,
+				31C2602A219139450070EA7A /* Frameworks */,
+				31C2602B219139450070EA7A /* Resources */,
+				849E43F620DD5EF451EBA7FC /* [CP] Embed Pods Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				31C26034219139450070EA7A /* PBXTargetDependency */,
+			);
+			name = FlexNetworkingTests;
+			productName = FlexNetworkingTests;
+			productReference = 31C2602D219139450070EA7A /* FlexNetworkingTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		9544D12B1F707EE400F0D5E3 /* Example */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 9544D13B1F707EE400F0D5E3 /* Build configuration list for PBXNativeTarget "Example" */;
@@ -389,9 +451,12 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 1010;
-				LastUpgradeCheck = 0930;
+				LastUpgradeCheck = 1010;
 				ORGANIZATIONNAME = FlexNetworking;
 				TargetAttributes = {
+					31C2602C219139450070EA7A = {
+						CreatedOnToolsVersion = 10.1;
+					};
 					9544D12B1F707EE400F0D5E3 = {
 						CreatedOnToolsVersion = 9.0;
 						ProvisioningStyle = Automatic;
@@ -428,11 +493,19 @@
 				95FB97A82190DB6700F4FE9D /* FlexNetworkingMac */,
 				9544D12B1F707EE400F0D5E3 /* Example */,
 				95FB97922190DA1900F4FE9D /* ExampleMac */,
+				31C2602C219139450070EA7A /* FlexNetworkingTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		31C2602B219139450070EA7A /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		9544D12A1F707EE400F0D5E3 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -499,6 +572,45 @@
 			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
 				"$(DERIVED_FILE_DIR)/Pods-Example-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		849E43F620DD5EF451EBA7FC /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-FlexNetworkingTests/Pods-FlexNetworkingTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-FlexNetworkingTests/Pods-FlexNetworkingTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-FlexNetworkingTests/Pods-FlexNetworkingTests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		A1865F61C71D913EBA5F8922 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-FlexNetworkingTests-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -586,6 +698,15 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		31C26029219139450070EA7A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				31C26039219139630070EA7A /* FlexNetworkingRxTests.swift in Sources */,
+				31C26030219139450070EA7A /* FlexNetworkingTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		9544D1281F707EE400F0D5E3 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -638,6 +759,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		31C26034219139450070EA7A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 95F9AB251D9AFA8600AACD19 /* FlexNetworking */;
+			targetProxy = 31C26033219139450070EA7A /* PBXContainerItemProxy */;
+		};
 		31F8FF282184FE9C00162133 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 95F9AB251D9AFA8600AACD19 /* FlexNetworking */;
@@ -678,6 +804,61 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		31C26035219139450070EA7A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = F90806C708F5796DD5060E66 /* Pods-FlexNetworkingTests.debug.xcconfig */;
+			buildSettings = {
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = KWQM6LWHDG;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = FlexNetworkingTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.flexnetworking.FlexNetworkingTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		31C26036219139450070EA7A /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5957FD9BB11B51E16CB3E7C3 /* Pods-FlexNetworkingTests.release.xcconfig */;
+			buildSettings = {
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = KWQM6LWHDG;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = FlexNetworkingTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.flexnetworking.FlexNetworkingTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 		9544D13C1F707EE400F0D5E3 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = A7206651C76E3C3CF1062E76 /* Pods-Example.debug.xcconfig */;
@@ -692,12 +873,12 @@
 				DEVELOPMENT_TEAM = KWQM6LWHDG;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = Example/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.dennislysenko.flexnetworking.Example;
+				PRODUCT_BUNDLE_IDENTIFIER = com.flexnetworking.ios.example;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -715,15 +896,15 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = KWQM6LWHDG;
+				DEVELOPMENT_TEAM = "";
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = Example/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.dennislysenko.flexnetworking.Example;
+				PRODUCT_BUNDLE_IDENTIFIER = com.flexnetworking.ios.example;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -781,6 +962,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -839,6 +1021,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
@@ -909,7 +1092,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = B482FFADD5B0AF3ABC4A7F30 /* Pods-ExampleMac.debug.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -929,7 +1112,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.flexnetworking.ExampleMac;
+				PRODUCT_BUNDLE_IDENTIFIER = com.flexnetworking.macos.example;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
 				SWIFT_VERSION = 5.0;
@@ -940,7 +1123,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 77A38ADD11CDD192990E33FA /* Pods-ExampleMac.release.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -959,7 +1142,7 @@
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.flexnetworking.ExampleMac;
+				PRODUCT_BUNDLE_IDENTIFIER = com.flexnetworking.macos.example;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
 				SWIFT_VERSION = 5.0;
@@ -974,7 +1157,7 @@
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_IDENTITY = "Mac Developer";
+				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEFINES_MODULE = YES;
@@ -1010,7 +1193,7 @@
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_IDENTITY = "Mac Developer";
+				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEFINES_MODULE = YES;
@@ -1040,6 +1223,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		31C26037219139450070EA7A /* Build configuration list for PBXNativeTarget "FlexNetworkingTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				31C26035219139450070EA7A /* Debug */,
+				31C26036219139450070EA7A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		9544D13B1F707EE400F0D5E3 /* Build configuration list for PBXNativeTarget "Example" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

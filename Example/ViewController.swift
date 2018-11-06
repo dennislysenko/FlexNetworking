@@ -14,55 +14,49 @@ import RxSwift
 /// Basically where we house unit tests because Xcode is being so difficult about testing a framework.
 class ViewController: UIViewController {
 
-    private let smallDownloadURL = "http://example.org/"
+    @IBOutlet weak var statusLabel: UILabel!
+
     private let bigDownloadURL = "https://16683.mc.tritondigital.com/NPR_510289/media-session/6b5a9388-72c8-4aee-b30b-6a58bc893ae7/anon.npr-mp3/npr/pmoney/2018/03/20180316_pmoney_pmpod454rerun.mp3?orgId=1&d=1274&p=510289&story=594317012&t=podcast&e=594317012&ft=pod&f=510289"
 
-    private let disposeBag = DisposeBag()
+    private var disposeBag = DisposeBag()
+    private var hasStartedDownload = false
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        test()
+    @IBAction func startDownloadTapped(_ sender: Any) {
+        guard !self.hasStartedDownload else {
+            return
+        }
+        self.hasStartedDownload = true
+
+        let progressObserver2_rx = AnyObserver<Float>.init { (event) in
+            switch event {
+            case .next(let progress):
+                self.statusLabel.text = "Progress: \(Int(100 * progress))%"
+            default:
+                break
+            }
+        }
+
+        FlexNetworking().rx.runRequest(path: self.bigDownloadURL, method: .get, body: nil, progressObserver: progressObserver2_rx)
+            .subscribe(onSuccess: { [weak self] (response) in
+                guard let sSelf = self else { return }
+                sSelf.statusLabel.text = "Download successful!"
+                sSelf.hasStartedDownload = false
+            }, onError: { [weak self] (error) in
+                guard let sSelf = self else { return }
+                sSelf.statusLabel.text = "Download failed!"
+                sSelf.hasStartedDownload = false
+                print("error downloading file: ", error)
+            }).disposed(by: self.disposeBag)
     }
-    
-    func test() {
-        let body1 = ["test": "test2"]
-        assert(body1.getQueryString() == "test=test2")
-        
-        let dict1: [String: Any] = ["test": 2]
-        assert(dict1.getQueryString() == "test=2")
-        
-        let dict2: [String: Any?] = ["test": 2]
-        assert(dict2.getQueryString() == "test=2")
 
-        let progressObserver1 = BehaviorSubject<Float>(value: 0)
-        progressObserver1
-            .observeOn(MainScheduler.asyncInstance)
-            .subscribe(onNext: { (progress) in
-                print(progress)
-            }).disposed(by: self.disposeBag)
-
-        FlexNetworking.default.rx.runRequest(path: self.smallDownloadURL, method: "GET", body: nil, progressObserver: progressObserver1.asObserver())
-            .subscribe(onSuccess: { (response) in
-                print("default: \(response)")
-            }, onError: { (error) in
-                print("error: ", error)
-            }).disposed(by: self.disposeBag)
-
-        DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
-            let progressObserver2 = BehaviorSubject<Float>(value: 0)
-            progressObserver2
-                .observeOn(MainScheduler.asyncInstance)
-                .subscribe(onNext: { (progress) in
-                    print(progress)
-                }).disposed(by: self.disposeBag)
-
-            FlexNetworking().rx.runRequest(path: self.bigDownloadURL, method: "GET", body: nil, progressObserver: progressObserver2.asObserver())
-                .subscribe(onSuccess: { (response) in
-                    print("new: \(response)")
-                }, onError: { (error) in
-                    print("error: ", error)
-                }).disposed(by: self.disposeBag)
+    @IBAction func cancelDownloadTapped(_ sender: Any) {
+        guard self.hasStartedDownload else {
+            return
+        }
+        self.hasStartedDownload = false
+        self.disposeBag = DisposeBag()
+        DispatchQueue.main.async {
+            self.statusLabel.text = "Download cancelled!"
         }
     }
 }

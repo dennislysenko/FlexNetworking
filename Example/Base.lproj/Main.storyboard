@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13122.16" systemVersion="17A277" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13104.12"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -9,13 +13,55 @@
         <!--View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ViewController" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="Example" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Orw-1J-sal">
+                                <rect key="frame" x="134.5" y="328.5" width="106" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="106" id="foL-yq-7rr"/>
+                                    <constraint firstAttribute="height" constant="30" id="rXJ-2y-9ZK"/>
+                                </constraints>
+                                <state key="normal" title="Start Download"/>
+                                <connections>
+                                    <action selector="startDownloadTapped:" destination="BYZ-38-t0r" eventType="touchUpInside" id="cd6-nd-T0E"/>
+                                </connections>
+                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Download not started" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jmh-Qa-aUI">
+                                <rect key="frame" x="0.0" y="289" width="375" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fHs-g6-mDk">
+                                <rect key="frame" x="163.5" y="366" width="48" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="weJ-Uh-FGE"/>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="48" id="xEH-zX-VYL"/>
+                                </constraints>
+                                <state key="normal" title="Cancel"/>
+                                <connections>
+                                    <action selector="cancelDownloadTapped:" destination="BYZ-38-t0r" eventType="touchUpInside" id="hCQ-oh-mQs"/>
+                                </connections>
+                            </button>
+                        </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="fHs-g6-mDk" firstAttribute="top" secondItem="Orw-1J-sal" secondAttribute="bottom" constant="7.5" id="HWe-8j-H0i"/>
+                            <constraint firstItem="Orw-1J-sal" firstAttribute="top" secondItem="jmh-Qa-aUI" secondAttribute="bottom" constant="18.5" id="Vkc-Fg-PCR"/>
+                            <constraint firstItem="Orw-1J-sal" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="ach-Eb-uCY"/>
+                            <constraint firstItem="fHs-g6-mDk" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="j3q-IP-O0t"/>
+                            <constraint firstItem="jmh-Qa-aUI" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="oId-dS-Mbd"/>
+                            <constraint firstItem="Orw-1J-sal" firstAttribute="centerY" secondItem="6Tk-OE-BBY" secondAttribute="centerY" id="pUq-aa-zIC"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="jmh-Qa-aUI" secondAttribute="trailing" id="xCh-6o-fHU"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
+                    <connections>
+                        <outlet property="statusLabel" destination="jmh-Qa-aUI" id="1E8-ML-ZQH"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
