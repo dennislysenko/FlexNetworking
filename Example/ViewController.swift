@@ -49,11 +49,26 @@ class ViewController: UIViewController {
             }).disposed(by: self.disposeBag)
     }
 
+    private var task: FlexTask?
+    @IBAction func startNormalDownloadTapped(_ sender: Any) {
+        self.task = FlexNetworking().runRequestWithoutHooksAsync(path: self.bigDownloadURL, method: .get, body: nil, progressObserver: { progress in
+            self.statusLabel.text = "Progress: \(Int(100 * progress))%"
+        }, completion: { (result) in
+            switch result {
+            case .success(let response):
+                print("downloaded file: ", response)
+            case .failure(let error):
+                print("error downloading file: ", error)
+            }
+        })
+    }
+
     @IBAction func cancelDownloadTapped(_ sender: Any) {
         guard self.hasStartedDownload else {
             return
         }
         self.hasStartedDownload = false
+        self.task?.cancel()
         self.disposeBag = DisposeBag()
         DispatchQueue.main.async {
             self.statusLabel.text = "Download cancelled!"

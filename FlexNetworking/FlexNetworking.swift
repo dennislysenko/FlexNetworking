@@ -31,10 +31,12 @@ public class FlexNetworking: NSObject {
 
     public static let `default` = FlexNetworking()
 
-    public init(preRequestHooks: [PreRequestHook] = [],
+    public init(
+        preRequestHooks: [PreRequestHook] = [],
         postRequestHooks: [PostRequestHook] = [],
         defaultEncoder: JSONEncoder = JSONEncoder(),
-        defaultDecoder: JSONDecoder = JSONDecoder()) {
+        defaultDecoder: JSONDecoder = JSONDecoder()
+    ) {
 
         self.preRequestHooks = preRequestHooks
         self.postRequestHooks = postRequestHooks
@@ -88,15 +90,9 @@ public class FlexNetworking: NSObject {
     /// Parses the result of a URLSessionTask completion handler into a Flex-standard `Response`, or throws a `RequestError`.
     ///
     public func parseNetworkResponse(originalRequestParameters: RequestParameters, responseData: Data?, httpURLResponse: HTTPURLResponse?, requestError: Error?) throws -> Response {
-        if let httpURLResponse = httpURLResponse {
-            return Response(
-                status: httpURLResponse.statusCode,
-                rawData: responseData,
-                headers: httpURLResponse.allHeaderFields,
-                asString: responseData.flatMap({ data in String(data: data, encoding: .utf8) }),
-                requestParameters: originalRequestParameters
-            )
-        } else if let requestError = requestError {
+        // we check for an error first because when the user cancels the task,
+        // there can be a non-null httpURLResponse and an non-null requestError
+        if let requestError = requestError {
             if (requestError as NSError).code == NSURLErrorDataNotAllowed || (requestError as NSError).code == NSURLErrorNotConnectedToInternet {
                 // No Internet code
                 throw RequestError.noInternet(requestError)
@@ -108,6 +104,14 @@ public class FlexNetworking: NSObject {
             } else {
                 throw RequestError.miscURLSessionError(requestError)
             }
+        } else if let httpURLResponse = httpURLResponse {
+            return Response(
+                status: httpURLResponse.statusCode,
+                rawData: responseData,
+                headers: httpURLResponse.allHeaderFields,
+                asString: responseData.flatMap({ data in String(data: data, encoding: .utf8) }),
+                requestParameters: originalRequestParameters
+            )
         } else {
             assert(false, "nil response and nil error")
             throw RequestError.unknownError(message: "Nil response and nil error in completion handler")
@@ -143,7 +147,7 @@ public class FlexNetworking: NSObject {
     public func runRequest(path: String, method: RequestMethod, body: RequestBody?, headers: [String: String] = [:], progressObserver: ((Float) -> Void)? = nil) throws -> Response {
         let sema = DispatchSemaphore(value: 0)
         var blockResult: Result<Response>!
-        self.runRequestAsync(path: path, method: method, body: body, headers: headers, progressObserver: progressObserver) { (result) in
+        _ = self.runRequestAsync(path: path, method: method, body: body, headers: headers, progressObserver: progressObserver) { (result) in
             blockResult = result
             sema.signal()
         }
@@ -185,7 +189,7 @@ public class FlexNetworking: NSObject {
     public func runRequestWithoutHooks(session: URLSession, path: String, method: RequestMethod, body: RequestBody?, headers: [String: String] = [:], progressObserver: ((Float) -> Void)? = nil) throws -> Response {
         let sema = DispatchSemaphore(value: 0)
         var blockResult: Result<Response>!
-        self.runRequestWithoutHooksAsync(path: path, method: method, body: body, headers: headers, progressObserver: progressObserver) { (result) in
+        _ = self.runRequestWithoutHooksAsync(path: path, method: method, body: body, headers: headers, progressObserver: progressObserver) { (result) in
             blockResult = result
             sema.signal()
         }
@@ -202,13 +206,14 @@ public class FlexNetworking: NSObject {
         }
     }
 
-    public func runRequestWithoutHooksAsync(path: String, method: RequestMethod, body: RequestBody?, headers: [String: String] = [:], progressObserver: ((Float) -> Void)? = nil, completion: ResultBlock?) {
+    public func runRequestWithoutHooksAsync(path: String, method: RequestMethod, body: RequestBody?, headers: [String: String] = [:], progressObserver: ((Float) -> Void)? = nil, completion: ResultBlock?) -> FlexTask {
         let wrapperCompletion: ResultBlock = { result in
             DispatchQueue.main.async {
                 completion?(result)
             }
         }
 
+        let flexTask = FlexTask()
         self.dispatchQueue.async {
             do {
                 let id = UUID().uuidString
@@ -237,11 +242,18 @@ public class FlexNetworking: NSObject {
                     headers: headers
                 )
                 task.taskDescription = id
-                task.resume()
+                if flexTask.isCancelled {
+                    self.cleanup(taskID: id)
+                    return
+                } else {
+                    flexTask.task = task
+                    task.resume()
+                }
             } catch let error {
                 wrapperCompletion(.failure(error))
             }
         }
+        return flexTask
     }
 
     ///
@@ -271,13 +283,21 @@ public class FlexNetworking: NSObject {
     /// Custom functionality that does not fit in `preRequestHooks` or `postRequestHooks` can be implemented by creating an extension of FlexNetworking with methods adopting the signatures you need, and delegating to internal FlexNetworking methods from those extension methods.
     /// If you need a cancel mechanism, look into the 'FlexNetworking/RxSwift' subpod.
     ///
-    public func runRequestAsync(path: String, method: RequestMethod, body: RequestBody?, headers: [String: String] = [:], progressObserver: ((Float) -> Void)? = nil, completion: ResultBlock?) {
+    public func runRequestAsync(
+        path: String,
+        method: RequestMethod,
+        body: RequestBody?,
+        headers: [String: String] = [:],
+        progressObserver: ((Float) -> Void)? = nil,
+        completion: ResultBlock?
+    ) -> FlexTask {
         let wrapperCompletion: ResultBlock = { result in
             DispatchQueue.main.async {
                 completion?(result)
             }
         }
 
+        let flexTask = FlexTask()
         self.dispatchQueue.async {
             do {
                 let startingRequestParameters: RequestParameters = (self.session, path, method, body, headers)
@@ -300,7 +320,7 @@ public class FlexNetworking: NSObject {
                     case .continue:
                         try responseHandler(response, index + 1)
                     case .makeNewRequest(let (_, path, method, body, headers)):
-                        self.runRequestWithoutHooksAsync(path: path, method: method, body: body, headers: headers, progressObserver: progressObserver, completion: { result in
+                        flexTask.task = self.runRequestWithoutHooksAsync(path: path, method: method, body: body, headers: headers, progressObserver: progressObserver, completion: { result in
                             do {
                                 switch result {
                                 case .success(let response):
@@ -311,11 +331,11 @@ public class FlexNetworking: NSObject {
                             } catch let error {
                                 wrapperCompletion(.failure(error))
                             }
-                        })
+                        }).task
                     }
                 }
 
-                self.runRequestWithoutHooksAsync(
+                flexTask.task = self.runRequestWithoutHooksAsync(
                     path: finalRequestParameters.path,
                     method: finalRequestParameters.method,
                     body: finalRequestParameters.body,
@@ -333,11 +353,12 @@ public class FlexNetworking: NSObject {
                             wrapperCompletion(.failure(error))
                         }
                     }
-                )
+                ).task
             } catch let error {
                 wrapperCompletion(.failure(error))
             }
         }
+        return flexTask
     }
 
     ///
@@ -359,7 +380,7 @@ public class FlexNetworking: NSObject {
         headers: [String: String] = [:],
         progressObserver: ((Float) -> Void)? = nil,
         completion: ((Result<OutputDTO>) -> Void)?
-    ) {
+    ) -> FlexTask {
         let wrapperCompletion = { (result: Result<OutputDTO>) in
             DispatchQueue.main.async {
                 completion?(result)
@@ -369,10 +390,11 @@ public class FlexNetworking: NSObject {
         let usableEncoder = encoder ?? self.defaultEncoder
         let usableDecoder = decoder ?? self.defaultDecoder
 
+        let flexTask = FlexTask()
         do {
             let data = try usableEncoder.encode(body)
             let body: RequestBody = RawBody(data: data, contentType: contentType)
-            self.runRequestAsync(path: path, method: method, body: body, headers: headers, progressObserver: progressObserver) { (result) in
+            flexTask.task = self.runRequestAsync(path: path, method: method, body: body, headers: headers, progressObserver: progressObserver) { (result) in
                 switch result {
                 case .success(let response):
                     do {
@@ -385,10 +407,11 @@ public class FlexNetworking: NSObject {
                 case .failure(let error):
                     wrapperCompletion(.failure(error))
                 }
-            }
+            }.task
         } catch let error {
             wrapperCompletion(.failure(error))
         }
+        return flexTask
     }
 
     ///
@@ -406,7 +429,7 @@ public class FlexNetworking: NSObject {
         headers: [String: String] = [:],
         progressObserver: ((Float) -> Void)? = nil,
         completion: ((Result<OutputDTO>) -> Void)?
-    ) {
+    ) -> FlexTask {
         let wrapperCompletion = { (result: Result<OutputDTO>) in
             DispatchQueue.main.async {
                 completion?(result)
@@ -415,7 +438,7 @@ public class FlexNetworking: NSObject {
 
         let usableDecoder = decoder ?? self.defaultDecoder
 
-        self.runRequestAsync(path: path, method: method, body: body, headers: headers, progressObserver: progressObserver) { (result) in
+        return self.runRequestAsync(path: path, method: method, body: body, headers: headers, progressObserver: progressObserver) { (result) in
             switch result {
             case .success(let response):
                 do {
@@ -561,4 +584,14 @@ public enum RequestMethod: String {
     case options = "OPTIONS"
     case connect = "CONNECT"
     case trace = "TRACE"
+}
+
+public class FlexTask {
+    internal weak var task: URLSessionTask?
+    internal var isCancelled = false
+
+    public func cancel() {
+        self.isCancelled = true
+        self.task?.cancel()
+    }
 }

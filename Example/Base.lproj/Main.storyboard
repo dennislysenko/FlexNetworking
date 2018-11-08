@@ -19,14 +19,26 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Orw-1J-sal">
-                                <rect key="frame" x="134.5" y="328.5" width="106" height="30"/>
+                                <rect key="frame" x="118.5" y="328.5" width="138" height="30"/>
                                 <constraints>
                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="106" id="foL-yq-7rr"/>
                                     <constraint firstAttribute="height" constant="30" id="rXJ-2y-9ZK"/>
                                 </constraints>
-                                <state key="normal" title="Start Download"/>
+                                <state key="normal" title="Start Download (Rx)"/>
                                 <connections>
                                     <action selector="startDownloadTapped:" destination="BYZ-38-t0r" eventType="touchUpInside" id="cd6-nd-T0E"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KdD-Qp-BBL">
+                                <rect key="frame" x="102" y="366.5" width="171" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="G08-iZ-YfM"/>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="171" id="HSU-Hm-SRf"/>
+                                </constraints>
+                                <state key="normal" title="Start Download (Normal)"/>
+                                <connections>
+                                    <action selector="startDownloadTapped:" destination="BYZ-38-t0r" eventType="touchUpInside" id="nb4-mf-7Mk"/>
+                                    <action selector="startNormalDownloadTapped:" destination="BYZ-38-t0r" eventType="touchUpInside" id="u0J-Fe-mRH"/>
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Download not started" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jmh-Qa-aUI">
@@ -36,7 +48,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fHs-g6-mDk">
-                                <rect key="frame" x="163.5" y="366" width="48" height="30"/>
+                                <rect key="frame" x="163.5" y="404.5" width="48" height="30"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="30" id="weJ-Uh-FGE"/>
                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="48" id="xEH-zX-VYL"/>
@@ -49,13 +61,15 @@
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="fHs-g6-mDk" firstAttribute="top" secondItem="Orw-1J-sal" secondAttribute="bottom" constant="7.5" id="HWe-8j-H0i"/>
+                            <constraint firstItem="KdD-Qp-BBL" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="6JW-hx-uzd"/>
                             <constraint firstItem="Orw-1J-sal" firstAttribute="top" secondItem="jmh-Qa-aUI" secondAttribute="bottom" constant="18.5" id="Vkc-Fg-PCR"/>
                             <constraint firstItem="Orw-1J-sal" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="ach-Eb-uCY"/>
+                            <constraint firstItem="fHs-g6-mDk" firstAttribute="top" secondItem="KdD-Qp-BBL" secondAttribute="bottom" constant="8" id="b34-d6-dna"/>
                             <constraint firstItem="fHs-g6-mDk" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="j3q-IP-O0t"/>
                             <constraint firstItem="jmh-Qa-aUI" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="oId-dS-Mbd"/>
                             <constraint firstItem="Orw-1J-sal" firstAttribute="centerY" secondItem="6Tk-OE-BBY" secondAttribute="centerY" id="pUq-aa-zIC"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="jmh-Qa-aUI" secondAttribute="trailing" id="xCh-6o-fHU"/>
+                            <constraint firstItem="KdD-Qp-BBL" firstAttribute="top" secondItem="Orw-1J-sal" secondAttribute="bottom" constant="8" id="xRF-Cd-zBX"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
