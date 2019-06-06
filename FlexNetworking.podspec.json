@@ -44,7 +44,7 @@
       "dependencies": {
         "FlexNetworking/Core": [
         ],
-        "SwiftyJSON": "~> 3.1.0"
+        "SwiftyJSON": "~> 5"
       },
       "source_files": [
         "FlexNetworking/FlexNetworking+SwiftyJSON.swift"
@@ -55,7 +55,7 @@
       "dependencies": {
         "FlexNetworking/Core": [
         ],
-        "RxSwift": "~> 4.1.2"
+        "RxSwift": "~> 5"
       },
       "source_files": [
         "FlexNetworking/FlexNetworking+RxSwift.swift"
