@@ -1,8 +1,8 @@
 use_frameworks!
 
 def common_pods
-    pod "SwiftyJSON", "~> 3.1.0"
-    pod "RxSwift", "~> 4.1.2"
+    pod "SwiftyJSON", "~> 5"
+    pod "RxSwift", "~> 5"
 end
 
 target 'FlexNetworking' do
