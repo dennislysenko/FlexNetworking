@@ -11,7 +11,7 @@ import SwiftyJSON
 
 extension Response {
     public var asJSON: JSON? {
-        return rawData.flatMap({ data in try? JSONSerialization.jsonObject(with: data, options: .allowFragments) }).flatMap { dictionary in JSON(dictionary) }
+        return rawData.flatMap({ data in try? JSON(data: data, options: .allowFragments) })
     }
 }
 
