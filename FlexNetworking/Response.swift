@@ -12,6 +12,7 @@ public struct Response: CustomStringConvertible {
     public let status: Int
 
     public let rawData: Data?
+    public let headers: [AnyHashable: Any]
     public let asString: String?
 
     public let requestParameters: RequestParameters
