@@ -95,7 +95,7 @@ public class FlexNetworking: NSObject {
             return Response(
                 status: httpURLResponse.statusCode,
                 rawData: responseData,
-                headers: httpURLResponse.allHeaderFields,
+                headers: httpURLResponse.allHeaderFields as NSDictionary,
                 asString: responseData.flatMap({ data in String(data: data, encoding: .utf8) }),
                 requestParameters: originalRequestParameters
             )
