@@ -26,6 +26,7 @@ public class FlexNetworking: NSObject {
     private var dataSoFar: [String: Data] = [:]
     private var expectedDataLength: [String: Int64] = [:]
     internal var responseObservers: [String: (Response?, Error?) -> Void] = [:]
+    internal var dataObservers: [String: (Data) -> Void] = [:]
     internal var progressObservers: [String: (Float) -> Void] = [:]
 
     public static let `default` = FlexNetworking()
@@ -327,6 +328,7 @@ extension FlexNetworking: URLSessionDataDelegate, URLSessionDownloadDelegate {
             progress = -1
         }
 
+        self.dataObservers[taskID]?(data)
         self.progressObservers[taskID]?(progress)
     }
 
