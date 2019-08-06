@@ -12,7 +12,8 @@ public struct Response: CustomStringConvertible {
     public let status: Int
 
     public let rawData: Data?
-    public let headers: [AnyHashable: Any]
+    // allows to get case-insensitive headers -- see: https://bugs.swift.org/browse/SR-2429
+    public let headers: NSDictionary
     public let asString: String?
 
     public let requestParameters: RequestParameters
