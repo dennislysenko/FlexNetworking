@@ -24,22 +24,31 @@ extension FlexNetworking.Rx {
     /// Creates a Single observable corresponding to the result of a FlexNetworking request where pre-request and post-request hooks are omitted.
     /// When the returned Single is disposed, it cancels the task corresponding to the request initiated by the observable.
     ///
-    public func runRequestWithoutHooks(path: String, method: String, body: RequestBody?, headers: [String: String] = [:], progressObserver: AnyObserver<Float>? = nil) -> Single<Response> {
+    public func runRequestWithoutHooks(path: String, method: String, body: RequestBody?, headers: [String: String] = [:], dataObserver: AnyObserver<Data>? = nil, progressObserver: AnyObserver<Float>? = nil) -> Single<Response> {
         return Single<Response>.create(subscribe: { observer in
             do {
                 let id = UUID().uuidString
                 let request: ReplaySubject<Response> = ReplaySubject.createUnbounded()
                 self.flex.responseObservers[id] = { response, error in
                     if let response = response {
+                        dataObserver?.onCompleted()
+
                         request.onNext(response)
                         request.onCompleted()
                     } else if let error = error {
+                        dataObserver?.onError(error)
+
                         request.onError(error)
                     } else {
                         assert(false)
                     }
                 }
                 self.flex.requestParamatersMap[id] = (session: self.flex.session, path: path, method: method, body: body, headers: headers)
+                if let dataObserver = dataObserver {
+                    self.flex.dataObservers[id] = { data in
+                        dataObserver.onNext(data)
+                    }
+                }
                 if let progressObserver = progressObserver {
                     self.flex.progressObservers[id] = { progress in
                         progressObserver.onNext(progress)
