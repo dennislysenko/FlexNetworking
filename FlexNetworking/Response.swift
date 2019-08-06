@@ -12,8 +12,7 @@ public struct Response: CustomStringConvertible {
     public let status: Int
 
     public let rawData: Data?
-    // allows to get case-insensitive headers -- see: https://bugs.swift.org/browse/SR-2429
-    public let headers: NSDictionary
+    public let headers: [AnyHashable: Any]
     public let asString: String?
 
     public let requestParameters: RequestParameters
@@ -30,5 +29,16 @@ public struct Response: CustomStringConvertible {
         }
 
         return "Response(status=\(self.status)):\n\(bodyDescription)"
+    }
+
+    /// The value which corresponds to the given header
+    /// field. Note that, in keeping with the HTTP RFC, HTTP header field
+    /// names are case-insensitive.
+    /// - parameter: field the header field name to use for the lookup (case-insensitive).
+    public func value(forHTTPHeaderField field: String) -> Any? {
+        // allows to get case-insensitive headers -- see: https://bugs.swift.org/browse/SR-2429
+        return headers.first(where: { (key, _) -> Bool in
+            return (key as? String)?.lowercased() == field.lowercased()
+        })?.value
     }
 }
