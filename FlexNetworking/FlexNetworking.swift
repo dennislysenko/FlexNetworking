@@ -390,6 +390,7 @@ extension FlexNetworking: URLSessionDataDelegate, URLSessionDownloadDelegate {
         self.dataSoFar[taskID] = nil
         self.expectedDataLength[taskID] = nil
         self.responseObservers[taskID] = nil
+        self.dataObservers[taskID] = nil
         self.progressObservers[taskID] = nil
     }
 
