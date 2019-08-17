@@ -328,7 +328,11 @@ extension FlexNetworking: URLSessionDataDelegate, URLSessionDownloadDelegate {
             progress = -1
         }
 
-        self.dataObservers[taskID]?(data)
+        // only forward data to the observer if it comes from a "successful" response
+        // defined as 200 <= status < 400; however, progress is reported on all statuses
+        if let statusCode = (dataTask.response as? HTTPURLResponse)?.statusCode, 200 ..< 400 ~= statusCode {
+            self.dataObservers[taskID]?(data)
+        }
         self.progressObservers[taskID]?(progress)
     }
 
