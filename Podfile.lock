@@ -1,20 +1,36 @@
 PODS:
+  - OHHTTPStubs/Core (6.1.0)
+  - OHHTTPStubs/Default (6.1.0):
+    - OHHTTPStubs/Core
+    - OHHTTPStubs/JSON
+    - OHHTTPStubs/NSURLSession
+    - OHHTTPStubs/OHPathHelpers
+  - OHHTTPStubs/JSON (6.1.0):
+    - OHHTTPStubs/Core
+  - OHHTTPStubs/NSURLSession (6.1.0):
+    - OHHTTPStubs/Core
+  - OHHTTPStubs/OHPathHelpers (6.1.0)
+  - OHHTTPStubs/Swift (6.1.0):
+    - OHHTTPStubs/Default
   - RxSwift (5.0.0)
   - SwiftyJSON (5.0.0)
 
 DEPENDENCIES:
+  - OHHTTPStubs/Swift (~> 6.1.0)
   - RxSwift (~> 5)
   - SwiftyJSON (~> 5)
 
 SPEC REPOS:
-  https://github.com/cocoapods/specs.git:
+  https://github.com/CocoaPods/Specs.git:
+    - OHHTTPStubs
     - RxSwift
     - SwiftyJSON
 
 SPEC CHECKSUMS:
+  OHHTTPStubs: 1e21c7d2c084b8153fc53d48400d8919d2d432d0
   RxSwift: 8b0671caa829a763bbce7271095859121cbd895f
   SwiftyJSON: 36413e04c44ee145039d332b4f4e2d3e8d6c4db7
 
-PODFILE CHECKSUM: cf772eb1f7093e902c78943920c92183e33893c6
+PODFILE CHECKSUM: 1f5b24bca044e2bdfaa920bffc0c9229d87c0873
 
-COCOAPODS: 1.7.1
+COCOAPODS: 1.8.4

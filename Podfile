@@ -1,4 +1,5 @@
 use_frameworks!
+inhibit_all_warnings!
 
 def common_pods
     pod "SwiftyJSON", "~> 5"
@@ -11,7 +12,6 @@ target 'FlexNetworking' do
 end
 
 target 'Example' do
-    common_pods
     platform :ios, '10.0'
 end
 
@@ -22,5 +22,10 @@ end
 
 target 'ExampleMac' do
     platform :osx, '10.10'
-    common_pods
+end
+
+target 'FlexNetworkingTests' do
+    platform :ios, '10.0'
+
+    pod "OHHTTPStubs/Swift", "~> 6.1.0"
 end
